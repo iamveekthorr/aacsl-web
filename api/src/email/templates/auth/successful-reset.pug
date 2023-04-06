@@ -1,0 +1,21 @@
+extends /_base
+
+block content
+  tr 
+    td(style='padding: 1rem;') 
+      p(style='text-transform:uppercase; text-align: center; margin: 30px 0 40px 0; font-weight: 600; font-size: 1rem;')= data.subject
+      p(style='margin-block-start:1rem; margin-block-end:1rem;') Dear 
+        span(style="text-transform: lowercase;") user
+      p(style='margin-block-start: 1rem; margin-block-end: 1rem;') your password has successfully been reset.
+
+      tr
+        td(style='padding: 1rem;')
+          p(style='margin-bottom: 0.5rem;') If you require additional assistance or you did not make this change, please contact 
+            a(href="http://example.com", target="_blank", rel="noopener noreferrer") support@aacsl.com.
+          p Cheers,
+          p The AACSL team
+
+      tr
+        td
+          p(style='text-align:center; font-size: 11px; padding: 1rem 0;') This email was sent to 
+            span()= data.to

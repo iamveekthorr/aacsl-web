@@ -1,0 +1,1353 @@
+{
+	"info": {
+		"_postman_id": "6ac70d30-f2f4-45cf-8878-653d8cf8f110",
+		"name": "Athena",
+		"description": "API consists of the endpoints used on the AACSL application. The API helpss accountants to manage their clients accounts and allows the users to add businesses to the platform, alowing the accounts to manage those accounts.\n\nversion : 1.0.0\n\nbaseUrl: 127.0.0.1:3000/v1/\n\nThe API helps users get to :\n\n- onboard on the AACSL application with relatve ease.\n- add businesses on the AACS platform.\n- manage their businesses on the AACSL platform.\n    \n\nThe API also helps the accountants to :\n\n- manage business added by the user.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "11737746"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if(pm.response.code === 200){\r",
+									"    pm.environment.set(\"jwt\", pm.response.json().data.tokens.accessToken)\r",
+									"    pm.environment.set(\"jwt-refresh\", pm.response.json().data.tokens.refreshToken)\r",
+									"};"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"oladipupo@5ranalysis.com\",\r\n    \"password\": \"@WXsT1235\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/v1/auth/login",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"v1",
+								"auth",
+								"login"
+							]
+						},
+						"description": "This endpoint allows the user to login on the AACSL application, using their saved credentials on the AACSL platform.\n\n### **List of required fields**\n\n| **field** | **isRequired** | **type** |\n| --- | --- | --- |\n| email | true | string |\n| password | true | string |\n\n### **Field description**\n\n`password` - field must conatin at least an upppercase character such as `A - Z` , a special character such as `(@,!,%,#,^,&,_)` , a lowercase character such as `a - z` and must be at **least eight (8)** characters long and at most **twenty four(24)** characters long. if this rule is not followed properly, the request will fail with a status code of `400 - Bad Request` !.\n\n`email` - field must conatin a vild email address such as `johndoe@email.com`. This field must have the `@` character and must have a `.com`"
+					},
+					"response": [
+						{
+							"name": "200 - OK",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\":\"dikehokonkwo@icloud.com\",\r\n    \"password\": \"@WXsT1234\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/v1/auth/login",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"v1",
+										"auth",
+										"login"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin, Accept-Encoding"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "10"
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "9"
+								},
+								{
+									"key": "X-RateLimit-Reset",
+									"value": "60"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "654"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"28e-eljRzzYatIXhNH5ydh4+rcRYtlg\""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 16 Feb 2023 15:32:58 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\",\n    \"data\": {\n        \"user\": {\n            \"id\": \"89B351D1-00AE-ED11-994D-00224840C1CF\",\n            \"firstName\": \"victor\",\n            \"lastName\": \"okonkwo\",\n            \"email\": \"dikehokonkwo@icloud.com\",\n            \"role\": \"USER\",\n            \"isKycVerified\": false\n        },\n        \"tokens\": {\n            \"accessToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI4OUIzNTFEMS0wMEFFLUVEMTEtOTk0RC0wMDIyNDg0MEMxQ0YiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTY3NjU2MTU3OCwiZXhwIjoxNjc2NjQ3OTc4fQ.qIjenVdcyRPS6ulw1DY71-Bzve6t9-JtmgTGcqRTMN8\",\n            \"refreshToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI4OUIzNTFEMS0wMEFFLUVEMTEtOTk0RC0wMDIyNDg0MEMxQ0YiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTY3NjU2MTU3OCwiZXhwIjoxNjc3MTY2Mzc4fQ.bqvldTsPefcxp4TFVyJVJiimHTZESw4Lp3jIsC065SY\"\n        }\n    }\n}"
+						},
+						{
+							"name": "400 - Bad Request",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\":\"oladipupo@5ranalysis.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/v1/auth/login",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"v1",
+										"auth",
+										"login"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin, Accept-Encoding"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "10"
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "9"
+								},
+								{
+									"key": "X-RateLimit-Reset",
+									"value": "60"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "151"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"97-pw0bgwyHhnh97P5kmSWJYG7LUDI\""
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 27 Feb 2023 23:53:25 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": 400,\n    \"message\": \"Validation failed\",\n    \"data\": [\n        {\n            \"property\": \"password\",\n            \"constraints\": [\n                \"value must be of type String!\",\n                \"value must not be empty\"\n            ]\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "Sign Up",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"oladipupo\",\r\n    \"lastName\": \"oduwole\",\r\n    \"password\": \"!W0test123\",\r\n    \"email\": \"oladipupo@5ranalysis.com\",\r\n    \"dob\":\"2022-12-16\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/v1/auth/signup",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"v1",
+								"auth",
+								"signup"
+							]
+						},
+						"description": "This endpoint allows the user to create an account on the AACSL application.\n\n### **List of required fields**\n\n| **field** | **isRequired** | **type** |\n| --- | --- | --- |\n| email | true | string |\n| password | true | string |\n| firstName | true | string |\n| lastName | true | string |\n| dob | true | date |\n\n### **Field description**\n\n`password` - field must conatin at least an upppercase character such as `A - Z` , a special character such as `(@,!,%,#,^,&,_)` , a lowercase character such as `a - z` and must be at **least eight (8)** characters long and at most **twenty four(24)** characters long. if this rule is not followed properly, the request will fail with a status code of `400 - Bad Request` !.\n\n`email` - field must conatin a vild email address such as `johndoe@email.com`. This field must have the `@` character and must have a `.com`\n\n`dob` - this field is a bit tricky as it requires a date string such as `03 - 20 - 2023`"
+					},
+					"response": [
+						{
+							"name": "200 - OK",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"firstName\": \"oladipupo\",\r\n    \"lastName\": \"oduwole\",\r\n    \"password\": \"!W0test123\",\r\n    \"email\": \"oladipupo@5ranalysis.com\",\r\n    \"dob\":\"2022-12-16\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/v1/auth/signup",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"v1",
+										"auth",
+										"signup"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin, Accept-Encoding"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "10"
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "9"
+								},
+								{
+									"key": "X-RateLimit-Reset",
+									"value": "60"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "55"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"37-IgrfPA1adT+5YCvWjUb6UnIXIaI\""
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 17 Feb 2023 16:43:52 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\",\n    \"data\": \"user created successfully\"\n}"
+						},
+						{
+							"name": "400 - Bad Request",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"firstName\": \"oladipupo\",\r\n    \"lastName\": \"oduwole\",\r\n    \"password\": \"!W0test123\",\r\n    \"email\": \"oladipupo@5ranalysis.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/v1/auth/signup",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"v1",
+										"auth",
+										"signup"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin, Accept-Encoding"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "10"
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "9"
+								},
+								{
+									"key": "X-RateLimit-Reset",
+									"value": "60"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "199"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"c7-Tbq//YSwzdUzjj5hEpiQzAJtX/c\""
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 28 Feb 2023 01:53:51 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": 400,\n    \"message\": \"Validation failed\",\n    \"data\": [\n        {\n            \"property\": \"dob\",\n            \"constraints\": [\n                \"dob must have non-whitespace characters\",\n                \"This field is required!\",\n                \"dob must be a valid ISO 8601 date string\"\n            ]\n        }\n    ]\n}"
+						},
+						{
+							"name": "409 - Conflict",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"firstName\": \"oladipupo\",\r\n    \"lastName\": \"oduwole\",\r\n    \"password\": \"!W0test123\",\r\n    \"email\": \"oladipupo@5ranalysis.com\",\r\n    \"dob\":\"2022-12-16\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/v1/auth/signup",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"v1",
+										"auth",
+										"signup"
+									]
+								}
+							},
+							"status": "Conflict",
+							"code": 409,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin, Accept-Encoding"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "10"
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "9"
+								},
+								{
+									"key": "X-RateLimit-Reset",
+									"value": "60"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "420"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"1a4-7KGPwpLScgGCPFn7vCMgFrtZn60\""
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 17 Feb 2023 17:07:48 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": 409,\n    \"message\": \"Error Creating user!, duplicate account!\",\n    \"stack\": \"Error: Error Creating user!, duplicate account!\\n    at AuthService.signUp (C:\\\\Users\\\\Devthorr\\\\Documents\\\\athena\\\\api\\\\src\\\\auth\\\\auth.service.ts:78:13)\\n    at processTicksAndRejections (node:internal/process/task_queues:96:5)\\n    at AuthController.signup (C:\\\\Users\\\\Devthorr\\\\Documents\\\\athena\\\\api\\\\src\\\\auth\\\\auth.controller.ts:33:12)\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Forgot Password",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"dikehokonkwo@icloud.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/v1/auth/forgot-password",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"v1",
+								"auth",
+								"forgot-password"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200 - OK",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"victorokonkwo67@gmail.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/v1/auth/forgot-password",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"v1",
+										"auth",
+										"forgot-password"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin, Accept-Encoding"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "10"
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "9"
+								},
+								{
+									"key": "X-RateLimit-Reset",
+									"value": "60"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "87"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"57-yQjCCJZi8OPuthGyylBMsMeklvU\""
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 19 Feb 2023 13:44:46 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\",\n    \"data\": \"An email has been sent successfully to the provided email\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Change Password",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"oldPassword\":\"@WXsT1234\",\r\n    \"newPassword\": \"\",\r\n    \"confirmPassword\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/v1/auth/change-password",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"v1",
+								"auth",
+								"change-password"
+							]
+						},
+						"description": "This reques is for `changing password` on the AACSL application.\n\nA user must be logged in to make this request, as the request requires the `Authorization Breaer` to make an authorized request. If this is not provided, the user will get a status code of `401 Unauthorized.`\n\nThis action can only take place once the user is logged into the application.\n\n### **List of fields and requirements.**\n\n| **field** | **isRequired** | **type** |\n| --- | --- | --- |\n| oldPassword | true | string |\n| newPasword | true | string |\n| confirmPassword | true | string |"
+					},
+					"response": [
+						{
+							"name": "Change Password - 401",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"oldPassword\":\"@WXsT1234\",\r\n    \"newPassword\": \"\",\r\n    \"confirmPassword\": \"\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/v1/auth/change-password",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"v1",
+										"auth",
+										"change-password"
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin, Accept-Encoding"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "10"
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "9"
+								},
+								{
+									"key": "X-RateLimit-Reset",
+									"value": "60"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"55f-+yKcuyBePBsDr2QDcZLyBDi7QLk\""
+								},
+								{
+									"key": "Content-Encoding",
+									"value": "gzip"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 22 Feb 2023 16:28:16 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": 401,\n    \"message\": \"Unauthorized\",\n    \"stack\": \"UnauthorizedException: Unauthorized\\n    at JwtGuard.handleRequest (C:\\\\Users\\\\Devthorr\\\\Documents\\\\athena\\\\api\\\\node_modules\\\\@nestjs\\\\passport\\\\dist\\\\auth.guard.js:69:30)\\n    at C:\\\\Users\\\\Devthorr\\\\Documents\\\\athena\\\\api\\\\node_modules\\\\@nestjs\\\\passport\\\\dist\\\\auth.guard.js:50:128\\n    at C:\\\\Users\\\\Devthorr\\\\Documents\\\\athena\\\\api\\\\node_modules\\\\@nestjs\\\\passport\\\\dist\\\\auth.guard.js:92:24\\n    at allFailed (C:\\\\Users\\\\Devthorr\\\\Documents\\\\athena\\\\api\\\\node_modules\\\\passport\\\\lib\\\\middleware\\\\authenticate.js:110:18)\\n    at attempt (C:\\\\Users\\\\Devthorr\\\\Documents\\\\athena\\\\api\\\\node_modules\\\\passport\\\\lib\\\\middleware\\\\authenticate.js:183:28)\\n    at AccessTokenStrategy.strategy.fail (C:\\\\Users\\\\Devthorr\\\\Documents\\\\athena\\\\api\\\\node_modules\\\\passport\\\\lib\\\\middleware\\\\authenticate.js:305:9)\\n    at AccessTokenStrategy.JwtStrategy.authenticate (C:\\\\Users\\\\Devthorr\\\\Documents\\\\athena\\\\api\\\\node_modules\\\\passport-jwt\\\\lib\\\\strategy.js:96:21)\\n    at attempt (C:\\\\Users\\\\Devthorr\\\\Documents\\\\athena\\\\api\\\\node_modules\\\\passport\\\\lib\\\\middleware\\\\authenticate.js:369:16)\\n    at authenticate (C:\\\\Users\\\\Devthorr\\\\Documents\\\\athena\\\\api\\\\node_modules\\\\passport\\\\lib\\\\middleware\\\\authenticate.js:370:7)\\n    at C:\\\\Users\\\\Devthorr\\\\Documents\\\\athena\\\\api\\\\node_modules\\\\@nestjs\\\\passport\\\\dist\\\\auth.guard.js:97:3\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Reset Password",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"password\": \"@WXsT1235\",\r\n    \"confirmPassword\": \"@WXsT1235\",\r\n    \"email\": \"dikehokonkwo@icloud.com\",\r\n    \"token\": \"4523f7283b687a65c6b111d7ca6e3ef66bd0f9221b0febce9f69b66fd3fe277f.b407ebadab9ecfaf98e3bd365ba9170cf7d0d4d38e9ad73abfb8df5a6908bb26\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/v1/auth/reset-password",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"v1",
+								"auth",
+								"reset-password"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Invalid Token - 400",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"password\": \"@WXsT1235\",\r\n    \"confirmPassword\": \"@WXsT1235\",\r\n    \"email\": \"victorokonkwo67@gmail.com\",\r\n    \"token\": \"eaa4f49c6bf8e3388dddf5d7177086f6a9537b72a7096289e5bf816365f4df73.72cafdf9821dc8516338517d40cf9327f3296ce0cb29b21aedb25171e1570b69\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/v1/auth/reset-password",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"v1",
+										"auth",
+										"reset-password"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin, Accept-Encoding"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "10"
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "7"
+								},
+								{
+									"key": "X-RateLimit-Reset",
+									"value": "18"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "551"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"227-fOXJ1vi+Ol6Tn6CaV+91Ovlgz3k\""
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 20 Feb 2023 03:57:10 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": 400,\n    \"message\": \"This token is either invalid or expired and is no longer valid for this request!\",\n    \"stack\": \"Error: This token is either invalid or expired and is no longer valid for this request!\\n    at AuthService.resetPassword (C:\\\\Users\\\\Devthorr\\\\Documents\\\\athena\\\\api\\\\src\\\\auth\\\\auth.service.ts:198:13)\\n    at runMicrotasks (<anonymous>)\\n    at processTicksAndRejections (node:internal/process/task_queues:96:5)\\n    at AuthController.passwordReset (C:\\\\Users\\\\Devthorr\\\\Documents\\\\athena\\\\api\\\\src\\\\auth\\\\auth.controller.ts:50:12)\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Refresh Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if(pm.response.code === 200){\r",
+									"    pm.environment.set(\"jwt\", pm.response.json().data.tokens.accessToken)\r",
+									"    pm.environment.set(\"jwt-refresh\", pm.response.json().data.tokens.refreshToken)\r",
+									"};\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt-refresh}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/v1/auth/refresh",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"v1",
+								"auth",
+								"refresh"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "In this folder you will find a list of routes for `Athentication` and `Authorization`\n\n| **endpoint** | **description** |\n| --- | --- |\n| `auth/login` | logs in a user on the AACSL application |\n| `auth/signup` | creats an account for a user on the AACSL platform |\n| `auth/forgot-password` | sends an email to the user with a link to reset password |\n| `auth/change-password` | allows user to change password once logged into the AACSL application |\n| `auth/reset-password` | allows user to change password using the forgot password link in ther email |\n| `auth/reset-password` | allows user to refresh their token using the refresh token in the `Authorization Brearer` |"
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Get All Users",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/v1/users",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"v1",
+								"users"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success - 200",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/v1/users",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"v1",
+										"users"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin, Accept-Encoding"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "10"
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "8"
+								},
+								{
+									"key": "X-RateLimit-Reset",
+									"value": "42"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "767"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"2ff-Z4G5x99fHlyRjmIw8qorbp9db8k\""
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 19 Feb 2023 13:48:34 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"success\",\n    \"data\": {\n        \"documents\": [\n            {\n                \"id\": \"8EC57467-00AE-ED11-994D-00224840C1CF\",\n                \"email\": \"victorokonkwo67@gmail.com\",\n                \"firstName\": \"victor\",\n                \"lastName\": \"okonkwo\",\n                \"role\": \"USER\",\n                \"isKycVerified\": false,\n                \"createdAt\": \"2023-02-16T12:47:08.730Z\",\n                \"updatedAt\": \"2023-02-16T12:47:08.730Z\"\n            },\n            {\n                \"id\": \"89B351D1-00AE-ED11-994D-00224840C1CF\",\n                \"email\": \"dikehokonkwo@icloud.com\",\n                \"firstName\": \"victor\",\n                \"lastName\": \"okonkwo\",\n                \"role\": \"USER\",\n                \"isKycVerified\": false,\n                \"createdAt\": \"2023-02-16T12:50:06.340Z\",\n                \"updatedAt\": \"2023-02-16T12:50:06.340Z\"\n            },\n            {\n                \"id\": \"6192D142-E2AE-ED11-994D-00224840C1CF\",\n                \"email\": \"oladipupo@5ranalysis.com\",\n                \"firstName\": \"oladipupo\",\n                \"lastName\": \"oduwole\",\n                \"role\": \"USER\",\n                \"isKycVerified\": false,\n                \"createdAt\": \"2023-02-17T15:43:53.523Z\",\n                \"updatedAt\": \"2023-02-17T15:43:53.523Z\"\n            }\n        ],\n        \"count\": 3\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Get User By Id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/v1/users/:id",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"v1",
+								"users",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "89B351D1-00AE-ED11-994D-00224840C1CF"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Companies House",
+			"item": [
+				{
+					"name": "Get Company Details",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "{{company-house-user}}",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{companies-house-url}}/company/:id",
+							"host": [
+								"{{companies-house-url}}"
+							],
+							"path": [
+								"company",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "04773536"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "200 OK",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://api.company-information.service.gov.uk/company/:id",
+									"protocol": "https",
+									"host": [
+										"api",
+										"company-information",
+										"service",
+										"gov",
+										"uk"
+									],
+									"path": [
+										"company",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "00000006"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Sun, 26 Feb 2023 12:42:45 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "1029"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "X-RateLimit-Query, origin, content-type, content-length, user-agent, host, accept, authorization"
+								},
+								{
+									"key": "Access-Control-Expose-Headers",
+									"value": "X-RateLimit-Window, X-RateLimit-Limit, X-RateLimit-Remain, X-RateLimit-Reset, Location, www-authenticate, cache-control, pragma, content-type, expires, last-modified"
+								},
+								{
+									"key": "Access-Control-Expose-Headers",
+									"value": "Location,www-authenticate,cache-control,pragma,content-type,expires,last-modified"
+								},
+								{
+									"key": "Access-Control-Max-Age",
+									"value": "3600"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-store, no-cache, must-revalidate, post-check=0, pre-check=0"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "X-Ratelimit-Limit",
+									"value": "600"
+								},
+								{
+									"key": "X-Ratelimit-Remain",
+									"value": "598"
+								},
+								{
+									"key": "X-Ratelimit-Reset",
+									"value": "1677415578"
+								},
+								{
+									"key": "X-Ratelimit-Window",
+									"value": "5m"
+								},
+								{
+									"key": "Server",
+									"value": "CompaniesHouse"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"company_number\": \"00000006\",\n    \"date_of_creation\": \"1862-10-25\",\n    \"last_full_members_list_date\": \"1986-07-02\",\n    \"type\": \"private-unlimited-nsc\",\n    \"jurisdiction\": \"england-wales\",\n    \"company_name\": \"MARINE AND GENERAL MUTUAL LIFE ASSURANCE SOCIETY\",\n    \"registered_office_address\": {\n        \"postal_code\": \"EC4N 6AF\",\n        \"address_line_2\": \"78 Cannon Street\",\n        \"country\": \"England\",\n        \"address_line_1\": \"Cms Cameron Mckenna Llp Cannon Place\",\n        \"locality\": \"London\"\n    },\n    \"accounts\": {\n        \"accounting_reference_date\": {\n            \"month\": \"12\",\n            \"day\": \"31\"\n        },\n        \"last_accounts\": {\n            \"made_up_to\": \"2014-12-31\",\n            \"type\": \"full\",\n            \"period_end_on\": \"2014-12-31\"\n        }\n    },\n    \"sic_codes\": [\n        \"65110\"\n    ],\n    \"undeliverable_registered_office_address\": false,\n    \"has_insolvency_history\": false,\n    \"company_status\": \"dissolved\",\n    \"etag\": \"0f74ad6c3c366269ac39899e0939851b2ebd15e3\",\n    \"has_charges\": true,\n    \"links\": {\n        \"self\": \"/company/00000006\",\n        \"filing_history\": \"/company/00000006/filing-history\",\n        \"officers\": \"/company/00000006/officers\",\n        \"charges\": \"/company/00000006/charges\"\n    },\n    \"registered_office_is_in_dispute\": false,\n    \"date_of_cessation\": \"2018-07-10\",\n    \"can_file\": false\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Person With Significant Control",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "{{company-house-user}}",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{companies-house-url}}/company/:id/persons-with-significant-control/corporate-entity-beneficial-owner/:psc_id",
+							"host": [
+								"{{companies-house-url}}"
+							],
+							"path": [
+								"company",
+								":id",
+								"persons-with-significant-control",
+								"corporate-entity-beneficial-owner",
+								":psc_id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "00000006"
+								},
+								{
+									"key": "psc_id",
+									"value": "0f74ad6c3c366269ac39899e0939851b2ebd15e3"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "404 - NOT FOUND",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{companies-house-url}}/company/:id/persons-with-significant-control/corporate-entity-beneficial-owner/:psc_id",
+									"host": [
+										"{{companies-house-url}}"
+									],
+									"path": [
+										"company",
+										":id",
+										"persons-with-significant-control",
+										"corporate-entity-beneficial-owner",
+										":psc_id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "00000006"
+										},
+										{
+											"key": "psc_id",
+											"value": "0f74ad6c3c366269ac39899e0939851b2ebd15e3"
+										}
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Sun, 26 Feb 2023 12:54:25 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "74"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "X-RateLimit-Query, origin, content-type, content-length, user-agent, host, accept, authorization"
+								},
+								{
+									"key": "Access-Control-Expose-Headers",
+									"value": "X-RateLimit-Window, X-RateLimit-Limit, X-RateLimit-Remain, X-RateLimit-Reset, Location, www-authenticate, cache-control, pragma, content-type, expires, last-modified"
+								},
+								{
+									"key": "Access-Control-Expose-Headers",
+									"value": "Location,www-authenticate,cache-control,pragma,content-type,expires,last-modified"
+								},
+								{
+									"key": "Access-Control-Max-Age",
+									"value": "3600"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-store, no-cache, must-revalidate, post-check=0, pre-check=0"
+								},
+								{
+									"key": "Pragma",
+									"value": "no-cache"
+								},
+								{
+									"key": "X-Ratelimit-Limit",
+									"value": "600"
+								},
+								{
+									"key": "X-Ratelimit-Remain",
+									"value": "596"
+								},
+								{
+									"key": "X-Ratelimit-Reset",
+									"value": "1677416235"
+								},
+								{
+									"key": "X-Ratelimit-Window",
+									"value": "5m"
+								},
+								{
+									"key": "Server",
+									"value": "CompaniesHouse"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"errors\": [\n        {\n            \"error\": \"company-psc-details-not-found\",\n            \"type\": \"ch:service\"\n        }\n    ]\n}"
+						}
+					]
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "companies-house-url",
+			"value": "https://api.company-information.service.gov.uk"
+		}
+	]
+}

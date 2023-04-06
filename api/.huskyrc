@@ -1,0 +1,5 @@
+{
+  "hooks": {
+    "pre-commit": "cd .. && lint-staged"
+  }
+}
