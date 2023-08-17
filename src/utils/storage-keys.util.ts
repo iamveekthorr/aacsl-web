@@ -1,0 +1,8 @@
+enum STORAGE_KEYS {
+  TOKEN = 'TOKEN',
+  USER = 'USER',
+  FIRST_NAME = 'FIRST_NAME',
+  LAST_NAME = 'LAST_NAME',
+}
+
+export default STORAGE_KEYS;

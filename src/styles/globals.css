@@ -1,0 +1,63 @@
+:root {
+  --slate-gray-pg-color: #7c8893;
+  --secondary-color: #0d263b;
+  --hero-sub-text-color: #828282;
+  --color-primary: #4564f3;
+  --hero-shadow-color: rgba(142, 142, 142, 0.15);
+  --card-2-bg: #4f4f4f;
+}
+
+*,
+*::after,
+*::before {
+  padding: 0;
+  margin: 0;
+  box-sizing: inherit;
+}
+
+html {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  max-width: 72rem;
+  margin: auto;
+}
+
+body {
+  line-height: 1.5;
+  font-size: calc(16rem / 16);
+}
+
+a {
+  color: currentColor;
+  text-decoration: none;
+}
+
+li {
+  list-style: none;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+@media only screen and (min-width: 48rem) and (orientation: portrait) {
+  body {
+    font-size: calc(18rem / 16);
+  }
+}
+
+@media only screen and (min-width: 64rem) and (orientation: landscape) {
+  body {
+    font-size: calc(19rem / 16);
+  }
+}
+
+@media only screen and (min-width: 70rem) {
+  body {
+    font-size: 62.5%;
+  }
+}
