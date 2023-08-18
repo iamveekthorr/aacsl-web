@@ -4,11 +4,11 @@ import type { Metadata } from 'next';
 import styles from '@/styles/login.module.css';
 
 import { SideNavigationComponent } from '@/components/side-navigation/side-navigation.component';
-import { TopNavigationComponent } from '@/components/top-navigation/top-navigation.component';
+import { TopNavigationComponent } from '@/components/header/header.component';
 import Guard from '@/components/guard/guard.component';
 import Provider from '../provider';
 
-export const metadata: Metadata = {
+const metadata: Metadata = {
   title: 'AACSL Wb Admin',
   description: 'AACSL Wb Admin',
 };

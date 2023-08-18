@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useUserStore } from '@/states/user.states';
 import QueryKeys from '@/utils/query-keys.util';
 
-import { interceptor } from '../../../axios.config';
+import { interceptor } from '@/axios.config';
 
 import { clearItems, getItemFromStorage } from '@/utils/local-storage.util';
 import STORAGE_KEYS from '@/utils/storage-keys.util';

@@ -1,4 +1,4 @@
-import { StyledTopNavBackground } from './top-navigation.styles';
+import { StyledTopNavBackground } from './header.styles';
 
 export const TopNavigationComponent = () => {
   return (

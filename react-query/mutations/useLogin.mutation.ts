@@ -1,11 +1,12 @@
 import { useMutation } from '@tanstack/react-query';
-import { interceptor } from '../../../axios.config';
+import { useRouter } from 'next/navigation';
+
+import { interceptor } from '@/axios.config';
 
 import { useUserStore } from '@/states/user.states';
-import { useRouter } from 'next/navigation';
 import QueryKeys from '@/utils/query-keys.util';
 
-import User from '../../interfaces/user.interface';
+import User from '@/interfaces/user.interface';
 
 import { saveItemToLocalStorage } from '@/utils/local-storage.util';
 
