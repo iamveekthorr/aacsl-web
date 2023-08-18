@@ -18,9 +18,5 @@ export const StyledNavItem = styled.div<{ $active?: boolean }>`
     background: rgba(47,128,237, .2);
     color: var(--blue-1, #2F80ED);
     font-weight: bolder;
-    
-    & > :first-child{
-        fill: var(--blue-1, #2F80ED);
-    }
   `}
 `;

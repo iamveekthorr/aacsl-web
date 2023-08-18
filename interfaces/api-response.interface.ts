@@ -1,5 +1,3 @@
-import { UserDetails } from './user.interface';
-
 export interface ApiResponse {
   status: string;
   data: {

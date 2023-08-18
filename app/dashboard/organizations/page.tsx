@@ -11,26 +11,27 @@ import {
   StyledTableHead,
   StyledHeadingText,
   PaginationText,
+  HeadingContainer,
+  HeadingIconContainer,
 } from '@/styles/main.styles';
 
+import OrganizationActive from '@/public/business-active.svg';
+
 const Organizations = () => {
-  const [businesses, setBusinesses] = React.useState<Array<any> | undefined>(
-    []
-  );
-
   const { data } = useGetAllBusinesses();
-
-  React.useEffect(() => {
-    setBusinesses(data?.data?.documents);
-    console.log(businesses);
-  }, [setBusinesses, businesses, data]);
 
   return (
     <StyledMileageBg>
-      <StyledHeadingText>Organizations</StyledHeadingText>
+      <HeadingContainer>
+        <HeadingIconContainer>
+          <OrganizationActive />
+        </HeadingIconContainer>
+        <StyledHeadingText>organizations</StyledHeadingText>
+      </HeadingContainer>
       <PaginationText>
         <p>
-          displaying {businesses?.length} of {data?.data?.count} organization(s)
+          displaying {data?.data.documents?.length} of {data?.data?.count}{' '}
+          organization(s)
         </p>
       </PaginationText>
 
@@ -62,7 +63,7 @@ const Organizations = () => {
           </tr>
         </thead>
         <tbody>
-          {businesses?.map((business) => (
+          {data?.data.documents?.map((business) => (
             <tr key={business.id}>
               <StyledTableData>{truncateText(business.id, 15)}</StyledTableData>
               <StyledTableData>

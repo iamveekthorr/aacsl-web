@@ -1,5 +1,4 @@
 'use client';
-import { ReactQueryHydrate } from '@/react-query/react-query.hydrate';
 import Button from '../components/button/button.component';
 
 import styles from '@/styles/login.module.css';

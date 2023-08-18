@@ -1,6 +1,6 @@
 'use client';
 
-import { StyledNavItem } from './side-nav-item.styles';
+import { StyledNavItem } from './nav-item.styles';
 
 export const SideNavItemComponent: React.FC<{
   children: React.ReactElement;
@@ -9,7 +9,7 @@ export const SideNavItemComponent: React.FC<{
 }> = ({ children, active, changeRoute }) => {
   return (
     <StyledNavItem $active={active} onClick={changeRoute}>
-      <>{children}</>
+      {children}
     </StyledNavItem>
   );
 };

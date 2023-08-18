@@ -13,7 +13,7 @@ import { ApiResponse } from '@/interfaces/api-response.interface';
 
 const getAllBusinesses = async (query?: string) => {
   const response = await interceptor.get(
-    query ? `/business/list?${query}` : '/business/list',
+    query ? `/payments?${query}` : '/payments',
     {
       headers: {
         Authorization: `Bearer ${getItemFromStorage(STORAGE_KEYS.TOKEN)}`,

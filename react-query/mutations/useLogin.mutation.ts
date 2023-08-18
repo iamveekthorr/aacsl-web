@@ -12,11 +12,6 @@ import { saveItemToLocalStorage } from '@/utils/local-storage.util';
 
 import STORAGE_KEYS from '@/utils/storage-keys.util';
 
-interface LoginDetails {
-  email: string;
-  password: string;
-}
-
 const login = async ({
   email,
   password,

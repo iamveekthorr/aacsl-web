@@ -12,23 +12,28 @@ import {
   StyledTableHead,
   StyledHeadingText,
   PaginationText,
+  HeadingIconContainer,
+  HeadingContainer,
+  StyledTableRow,
 } from '@/styles/main.styles';
 
+import PeopleActive from '@/public/people-active.svg';
+
 const Users = () => {
-  const [users, setUsers] = React.useState<Array<UserDetails> | undefined>([]);
-
   const { data } = useGetAllUsers();
-
-  React.useEffect(() => {
-    setUsers(data?.data?.documents);
-  }, [setUsers, users, data]);
 
   return (
     <StyledMileageBg>
-      <StyledHeadingText>users</StyledHeadingText>
+      <HeadingContainer>
+        <HeadingIconContainer>
+          <PeopleActive />
+        </HeadingIconContainer>
+        <StyledHeadingText>users</StyledHeadingText>
+      </HeadingContainer>
       <PaginationText>
         <p>
-          displaying {users?.length} of {data?.data?.count} users
+          displaying {data?.data.documents?.length} of {data?.data?.count}
+          users
         </p>
       </PaginationText>
 
@@ -60,8 +65,8 @@ const Users = () => {
           </tr>
         </thead>
         <tbody>
-          {users?.map((user) => (
-            <tr key={user.id}>
+          {(data?.data.documents as UserDetails[])?.map((user) => (
+            <StyledTableRow key={user.id}>
               <StyledTableData>{truncateText(user.id, 15)}</StyledTableData>
               <StyledTableData>
                 {user.firstName} {user.lastName}
@@ -72,7 +77,7 @@ const Users = () => {
               <StyledTableData>
                 {new Date(user.createdAt).toISOString()}
               </StyledTableData>
-            </tr>
+            </StyledTableRow>
           ))}
         </tbody>
       </table>

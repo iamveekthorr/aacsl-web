@@ -11,7 +11,11 @@ import {
   StyledTableHead,
   StyledHeadingText,
   PaginationText,
+  HeadingContainer,
+  HeadingIconContainer,
 } from '@/styles/main.styles';
+
+import MileageActive from '@/public/driving-active.svg';
 
 const Mileage = () => {
   const [mileage, setMileage] = React.useState<Array<any> | undefined>([]);
@@ -24,7 +28,12 @@ const Mileage = () => {
 
   return (
     <StyledMileageBg>
-      <StyledHeadingText>mileage</StyledHeadingText>
+      <HeadingContainer>
+        <HeadingIconContainer>
+          <MileageActive />
+        </HeadingIconContainer>
+        <StyledHeadingText>mileage</StyledHeadingText>
+      </HeadingContainer>
       <PaginationText>
         <p>
           displaying {mileage?.length} of {data?.data?.count} mileages
