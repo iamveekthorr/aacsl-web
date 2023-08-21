@@ -12,14 +12,11 @@ import STORAGE_KEYS from '@/utils/storage-keys.util';
 import { ApiResponse } from '@/interfaces/api-response.interface';
 
 const getAllBusinesses = async (query?: string) => {
-  const response = await interceptor.get(
-    query ? `/business/list?${query}` : '/business/list',
-    {
-      headers: {
-        Authorization: `Bearer ${getItemFromStorage(STORAGE_KEYS.TOKEN)}`,
-      },
-    }
-  );
+  const response = await interceptor.get(`/business/list?${query}`, {
+    headers: {
+      Authorization: `Bearer ${getItemFromStorage(STORAGE_KEYS.TOKEN)}`,
+    },
+  });
   return response.data as ApiResponse;
 };
 
@@ -35,7 +32,6 @@ const useGetAllBusinesses = (query?: string) => {
       enabled: !!getItemFromStorage(STORAGE_KEYS.TOKEN),
       keepPreviousData: true,
       onError: async (err) => {
-        console.log(err, 'error');
         if (err instanceof AxiosError) {
           if (err.response?.status === 401 && user.currentUser) {
             user.resetState();

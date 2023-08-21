@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import useGetAllUsers from '@/react-query/query/useGetAllUsers.query';
 import { UserDetails } from '@/interfaces/user.interface';
@@ -15,12 +15,54 @@ import {
   HeadingIconContainer,
   HeadingContainer,
   StyledTableRow,
+  StyledPaginationContainer,
+  StyledControlButton,
+  StyledControls,
+  SearchInput,
 } from '@/styles/main.styles';
 
 import PeopleActive from '@/public/people-active.svg';
+import { useDebounce } from '@/hooks/useDebounce.hook';
+import { formatDate } from '@/utils/format-date.util';
 
 const Users = () => {
-  const { data } = useGetAllUsers();
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const [searchText, setSearchText] = React.useState('');
+
+  const debouncedSearchText = useDebounce(searchText, 200);
+
+  const handleSearchInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setSearchText(event.target.value);
+  };
+
+  const handleNextPage = () => {
+    setCurrentPage((prevPage) => {
+      if (data?.data?.totalPages && currentPage >= data.data.totalPages) {
+        return prevPage;
+      }
+
+      return prevPage + 1;
+    });
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage((prevPage) => prevPage - 1);
+      console.log(currentPage);
+    }
+  };
+
+  const { data } = useGetAllUsers(
+    `page=${currentPage}${
+      debouncedSearchText && `&email=${debouncedSearchText}`
+    }`
+  );
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, []);
 
   return (
     <StyledMileageBg>
@@ -30,12 +72,32 @@ const Users = () => {
         </HeadingIconContainer>
         <StyledHeadingText>users</StyledHeadingText>
       </HeadingContainer>
-      <PaginationText>
-        <p>
-          displaying {data?.data.documents?.length} of {data?.data?.count}
-          users
-        </p>
-      </PaginationText>
+      <StyledPaginationContainer>
+        <PaginationText>
+          <p>
+            displaying {data?.data.documents?.length} of {data?.data?.count}{' '}
+            users
+          </p>
+        </PaginationText>
+
+        <SearchInput
+          type="text"
+          placeholder="search by email..."
+          value={searchText}
+          onChange={handleSearchInputChange}
+        />
+        <StyledControls>
+          <StyledControlButton onClick={handlePreviousPage}>
+            &lt;
+          </StyledControlButton>
+          <p>
+            page {currentPage} of {data?.data.totalPages}
+          </p>
+          <StyledControlButton onClick={handleNextPage}>
+            &gt;
+          </StyledControlButton>
+        </StyledControls>
+      </StyledPaginationContainer>
 
       <table
         role="presentation"
@@ -75,7 +137,7 @@ const Users = () => {
               <StyledTableData>{user.phoneNumber}</StyledTableData>
               <StyledTableData>{String(user?.isActive)}</StyledTableData>
               <StyledTableData>
-                {new Date(user.createdAt).toISOString()}
+                {formatDate(new Date(user.createdAt))}
               </StyledTableData>
             </StyledTableRow>
           ))}

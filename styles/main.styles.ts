@@ -47,3 +47,45 @@ export const HeadingIconContainer = styled.div`
 export const StyledTableRow = styled.tr`
   padding: 1rem 0;
 `;
+
+export const StyledPaginationContainer = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
+  & > :first-child {
+    margin-right: auto;
+  }
+`;
+export const StyledControlButton = styled.div`
+  background-color: rgba(47, 128, 237, 1);
+  padding: 0.5rem 0.7rem;
+  font-size: 0.7rem;
+  font-weight: bolder;
+  border-radius: 3px;
+  color: white;
+  cursor: pointer;
+  user-select: none;
+`;
+
+export const StyledControls = styled.div`
+  display: flex;
+  align-items: center;
+
+  & > *:not(:last-child) {
+    margin-right: 1rem;
+  }
+`;
+
+export const SearchInput = styled.input`
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  width: 300px;
+  font-family: inherit;
+  margin-right: 1rem;
+  font-size: inherit;
+
+  &:focus {
+    outline: none;
+  }
+`;

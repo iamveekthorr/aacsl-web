@@ -33,7 +33,6 @@ const useLogin = () => {
   return useMutation(login, {
     mutationKey: [QueryKeys.LOGIN],
     onSuccess: (data) => {
-      console.log(data, 'data from useLogin');
       user.updateUser({ ...data });
 
       //   const toastId = toast.success(

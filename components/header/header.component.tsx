@@ -17,12 +17,11 @@ export const HeaderComponent = () => {
   const [initials, setInitials] = React.useState<string | undefined>('');
 
   useIsomorphicLayoutEffect(() => {
-    console.log(state?.user.firstName[0]);
     setName(`${state?.user.firstName} ${state?.user.lastName}`);
     setInitials(
       `${state?.user.firstName[0].toLocaleUpperCase()}${state?.user.lastName[0].toLocaleUpperCase()}`
     );
-  });
+  }, [state?.user.firstName, state?.user.lastName, setInitials, setName]);
 
   return (
     <StyledTopNavBackground>

@@ -4,18 +4,25 @@ import Button from '../components/button/button.component';
 import styles from '@/styles/login.module.css';
 import { useForm } from '../hooks/useForm.hook';
 import useLogin from '../react-query/mutations/useLogin.mutation';
+import ShowView from '../components/show-view/show-view.component';
 
 export default function Login() {
-  const { formValues, handleInputChange, resetForm } = useForm({
-    initialValues: { email: '', password: '' },
-  });
+  const { formValues, handleInputChange, resetForm, validateForm, errors } =
+    useForm({
+      initialValues: { email: '', password: '' },
+      requiredFields: ['email', 'password'],
+    });
   const { mutateAsync: login } = useLogin();
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    console.log('Form submitted with values:', formValues);
-    await login({ ...formValues });
-    resetForm();
+
+    const isValid = validateForm();
+    // submit form when form is valid
+    if (isValid) {
+      await login({ ...formValues });
+      resetForm();
+    }
   };
 
   return (
@@ -49,6 +56,7 @@ export default function Login() {
               defaultValue={formValues.email}
               onChange={handleInputChange}
             />
+            {errors?.email && <p>{errors.email}</p>}
           </div>
           <div className={`${styles.form_group} ${styles.display_flex}`}>
             <label htmlFor="password" className={`${styles.form_label}`}>
@@ -62,6 +70,9 @@ export default function Login() {
               className={`${styles.input_field}`}
               onChange={handleInputChange}
             />
+            <ShowView when={!!errors?.password}>
+              <p>{errors?.password}</p>
+            </ShowView>
           </div>
           <Button text="login" btnType="submit" />
         </form>

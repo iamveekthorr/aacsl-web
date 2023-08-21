@@ -12,14 +12,11 @@ import STORAGE_KEYS from '@/utils/storage-keys.util';
 import { ApiResponse } from '@/interfaces/api-response.interface';
 
 const getAllMileage = async (query?: string) => {
-  const response = await interceptor.get(
-    query ? `/users?${query}` : '/mileage',
-    {
-      headers: {
-        Authorization: `Bearer ${getItemFromStorage(STORAGE_KEYS.TOKEN)}`,
-      },
-    }
-  );
+  const response = await interceptor.get(`/mileage?${query}`, {
+    headers: {
+      Authorization: `Bearer ${getItemFromStorage(STORAGE_KEYS.TOKEN)}`,
+    },
+  });
   return response.data as ApiResponse;
 };
 
@@ -32,7 +29,6 @@ const useGetAllMileage = (query?: string) => {
     enabled: !!getItemFromStorage(STORAGE_KEYS.TOKEN),
     keepPreviousData: true,
     onError: async (err) => {
-      console.log(err);
       if (err instanceof AxiosError) {
         if (err.response?.status === 401 && user.currentUser) {
           user.resetState();

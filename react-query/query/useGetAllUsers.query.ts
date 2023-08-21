@@ -11,8 +11,8 @@ import { clearItems, getItemFromStorage } from '@/utils/local-storage.util';
 import STORAGE_KEYS from '@/utils/storage-keys.util';
 import { ApiResponse } from '@/interfaces/api-response.interface';
 
-export const getAllUsers = async (query?: string) => {
-  const response = await interceptor.get(query ? `/users?${query}` : '/users', {
+const getAllUsers = async (query?: string) => {
+  const response = await interceptor.get(`/users?${query}`, {
     headers: {
       Authorization: `Bearer ${getItemFromStorage(STORAGE_KEYS.TOKEN)}`,
     },
