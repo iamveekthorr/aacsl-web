@@ -89,3 +89,92 @@ export const SearchInput = styled.input`
     outline: none;
   }
 `;
+
+export const ModalHeadingTextContainer = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
+
+  & > :first-child {
+    margin-right: 1rem;
+  }
+
+  & > div:last-of-type {
+    display: flex;
+    align-items: center;
+    & > :first-child {
+      margin-right: 0.5rem;
+    }
+  }
+`;
+
+export const StyledBusinessName = styled.p`
+  text-transform: capitalize;
+  font-weight: bolder;
+  font-size: 1rem;
+  width: 12rem;
+`;
+
+export const StyledBusinessTag = styled.p`
+  padding: 5px;
+  text-transform: uppercase;
+  background-color: rgba(47, 128, 237, 0.2);
+  color: rgba(47, 128, 237, 1);
+  border-radius: 3px;
+  font-weight: bolder;
+`;
+
+export const StyledDetailsHeading = styled.p`
+  font-size: 0.7rem;
+  font-weight: bolder;
+  margin-bottom: 0.5rem;
+  text-transform: capitalize;
+`;
+
+export const StyledDetailsItem = styled.p`
+  & > :not(span:last-of-type) {
+    text-transform: capitalize;
+  }
+`;
+
+export const StyledDataDetails = styled.div`
+  & > *:not(:last-child) {
+    margin-bottom: 0.5rem;
+  }
+`;
+
+export const StyledDashBoardGrid = styled.section`
+  display: grid;
+  /* grid-template-columns: repeat(2, minmax(10rem, 1fr)); */
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  grid-auto-rows: minmax(10rem, auto);
+
+  /* & > :nth-child(3) {
+    grid-row: 2 / 4;
+    grid-column: span 2;
+  }
+
+  & > :nth-child(4) {
+    grid-row: 3;
+    grid-column: 2;
+  } */
+`;
+
+export const StyledGridItem = styled.div<{ $color: string }>`
+  background: linear-gradient(${({ $color }) => $color});
+
+  padding: 2rem;
+  cursor: pointer;
+  font-weight: bolder;
+  color: white;
+
+  & > :first-child {
+    font-size: 2rem;
+    text-transform: capitalize;
+  }
+
+  & > p:last-of-type {
+    font-size: 1rem;
+  }
+`;

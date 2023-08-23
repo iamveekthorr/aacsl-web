@@ -14,6 +14,11 @@ const nextConfig = {
       cssProp: true,
     },
   },
+  env: {
+    apiStaging: 'https://aacls-web-app.azurewebsites.net/v1',
+    apiLocal: 'http://127.0.0.1:3000/v1',
+    environment: 'development',
+  },
 };
 
 module.exports = nextConfig;

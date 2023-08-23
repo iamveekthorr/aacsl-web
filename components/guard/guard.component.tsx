@@ -8,26 +8,24 @@ const Guard: FC<{ children: ReactElement }> = ({ children }) => {
   const router = useRouter();
   const pathName = usePathname();
 
-  const user = useUserStore();
+  const user = useUserStore((state) => state.currentUser);
 
   useIsomorphicLayoutEffect(() => {
     // on initial load - run auth check
     authCheck(pathName);
-  }, [pathName, user.currentUser]);
+  }, [pathName, user]);
 
   const authCheck = (url: string | null) => {
     // redirect to login page if accessing a private page and not logged in
     const publicPaths = ['/'];
     const path = url?.split('?')[0];
-    if (
-      path &&
-      !user.currentUser?.tokens.accessToken &&
-      !publicPaths.includes(path)
-    ) {
+    if (path && !user?.tokens.accessToken && !publicPaths.includes(path)) {
       router.push(`/`);
     }
+    //  else if (user && user?.user.role !== 'ADMIN') {
+    //   router.push(`/`);
+    // }
   };
-
   return children;
 };
 

@@ -9,25 +9,25 @@ import { interceptor } from '@/axios.config';
 
 import { clearItems, getItemFromStorage } from '@/utils/local-storage.util';
 import STORAGE_KEYS from '@/utils/storage-keys.util';
-import { ApiResponse } from '@/interfaces/api-response.interface';
+import { ApiBaseResponse } from '@/interfaces/api-response.interface';
 
-const getAllBusinesses = async (query?: string) => {
+const getAllTransactions = async (query?: string) => {
   const response = await interceptor.get(`/payments?${query}`, {
     headers: {
       Authorization: `Bearer ${getItemFromStorage(STORAGE_KEYS.TOKEN)}`,
     },
   });
-  return response.data as ApiResponse;
+  return response.data as ApiBaseResponse;
 };
 
-const useGetAllBusinesses = (query?: string) => {
+const useGetAllTransactions = (query?: string) => {
   const user = useUserStore();
 
   const router = useRouter();
 
   return useQuery(
-    [QueryKeys.GET_ALL_BUSINESSES],
-    () => getAllBusinesses(query),
+    [QueryKeys.GET_ALL_BUSINESSES, query],
+    () => getAllTransactions(query),
     {
       enabled: !!getItemFromStorage(STORAGE_KEYS.TOKEN),
       keepPreviousData: true,
@@ -44,4 +44,4 @@ const useGetAllBusinesses = (query?: string) => {
   );
 };
 
-export default useGetAllBusinesses;
+export default useGetAllTransactions;
