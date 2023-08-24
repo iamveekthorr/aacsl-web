@@ -66,7 +66,6 @@ const Users = () => {
   const handlePreviousPage = () => {
     if (currentPage > 1) {
       setCurrentPage((prevPage) => prevPage - 1);
-      console.log(currentPage);
     }
   };
 

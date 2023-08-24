@@ -1,0 +1,21 @@
+.otpContainer {
+  display: flex;
+  justify-content: space-between;
+  width: 200px;
+  margin: 0 auto;
+}
+
+.otpInput {
+  width: 40px;
+  height: 40px;
+  font-size: 20px;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin: 0 5px;
+}
+
+/* Optional: Add styling for invalid OTP */
+.invalid {
+  border-color: red;
+}

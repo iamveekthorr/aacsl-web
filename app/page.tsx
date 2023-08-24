@@ -1,10 +1,12 @@
 'use client';
-import Button from '../components/button/button.component';
+import Link from 'next/link';
+import Button from '@/components/button/button.component';
 
 import styles from '@/styles/login.module.css';
-import { useForm } from '../hooks/useForm.hook';
-import useLogin from '../react-query/mutations/useLogin.mutation';
-import ShowView from '../components/show-view/show-view.component';
+import { useForm } from '@/hooks/useForm.hook';
+import useLogin from '@/react-query/mutations/useLogin.mutation';
+import ShowView from '@/components/show-view/show-view.component';
+import { StyledForm } from '@/components/form/form.styles';
 
 export default function Login() {
   const { formValues, handleInputChange, resetForm, validateForm, errors } =
@@ -40,10 +42,8 @@ export default function Login() {
       <div
         className={`${styles.display_flex} ${styles.justify_center} ${styles.align_center} ${styles.form_bg}`}
       >
-        <form style={{ fontFamily: 'inherit' }} onSubmit={handleSubmit}>
-          <div
-            className={`${styles.form_group} ${styles.display_flex} ${styles.u_margin_bottom_sm}`}
-          >
+        <StyledForm style={{ fontFamily: 'inherit' }} onSubmit={handleSubmit}>
+          <div className={`${styles.form_group} ${styles.display_flex}`}>
             <label htmlFor="email" className={`${styles.form_label}`}>
               email
             </label>
@@ -75,7 +75,12 @@ export default function Login() {
             </ShowView>
           </div>
           <Button text="login" btnType="submit" />
-        </form>
+
+          <p>
+            If you do not have an account, please{' '}
+            <Link href="/sign-up">sign up</Link>
+          </p>
+        </StyledForm>
       </div>
     </section>
   );

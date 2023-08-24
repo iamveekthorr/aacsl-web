@@ -1,5 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
+import { AxiosError } from 'axios';
 
 import { interceptor } from '@/axios.config';
 
@@ -8,9 +9,11 @@ import QueryKeys from '@/utils/query-keys.util';
 
 import User from '@/interfaces/user.interface';
 
-import { saveItemToLocalStorage } from '@/utils/local-storage.util';
+import { clearItems, saveItemToLocalStorage } from '@/utils/local-storage.util';
 
 import STORAGE_KEYS from '@/utils/storage-keys.util';
+
+import { useToast } from '@/app/toast.provider';
 
 const login = async ({
   email,
@@ -29,16 +32,16 @@ const login = async ({
 const useLogin = () => {
   const router = useRouter();
   const user = useUserStore();
+  const { showToast } = useToast();
 
   return useMutation(login, {
     mutationKey: [QueryKeys.LOGIN],
     onSuccess: (data) => {
       user.updateUser({ ...data });
 
-      //   const toastId = toast.success(
-      //     'You have been logged in successfully. You would be redirected shortly.',
-      //     { icon: '🚀' }
-      //   );
+      showToast(
+        'You have been logged in successfully. You would be redirected shortly. 🚀'
+      );
 
       saveItemToLocalStorage(
         STORAGE_KEYS.TOKEN,
@@ -47,10 +50,21 @@ const useLogin = () => {
           : ''
       );
 
-      setTimeout(async () => {
-        // toast.dismiss(toastId);
+      setTimeout(() => {
         router.push('/dashboard');
       }, 3000);
+    },
+    onError: async (err: any) => {
+      if (err instanceof AxiosError) {
+        showToast(err.response?.data.message);
+        if (err.response?.status === 401 && user.currentUser) {
+          user.resetState();
+          router.push('/login');
+          clearItems();
+        }
+      } else {
+        showToast(err?.message);
+      }
     },
   });
 };

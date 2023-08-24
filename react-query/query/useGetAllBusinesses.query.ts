@@ -10,6 +10,7 @@ import { interceptor } from '@/axios.config';
 import { clearItems, getItemFromStorage } from '@/utils/local-storage.util';
 import STORAGE_KEYS from '@/utils/storage-keys.util';
 import { ApiBaseResponse } from '@/interfaces/api-response.interface';
+import { useToast } from '@/app/toast.provider';
 
 const getAllBusinesses = async (query?: string) => {
   const response = await interceptor.get(`/business/list?${query}`, {
@@ -23,6 +24,8 @@ const getAllBusinesses = async (query?: string) => {
 const useGetAllBusinesses = (query?: string) => {
   const user = useUserStore();
 
+  const { showToast } = useToast();
+
   const router = useRouter();
 
   return useQuery(
@@ -31,14 +34,19 @@ const useGetAllBusinesses = (query?: string) => {
     {
       enabled: !!getItemFromStorage(STORAGE_KEYS.TOKEN),
       keepPreviousData: true,
-      onError: async (err) => {
+      onError: async (err: any) => {
         if (err instanceof AxiosError) {
+          showToast(err.message);
           if (err.response?.status === 401 && user.currentUser) {
             user.resetState();
             router.push('/login');
             clearItems();
           }
-        }
+        } else showToast(err?.message);
+
+        setTimeout(() => {
+          router.push('/dashboard');
+        }, 3000);
       },
     }
   );

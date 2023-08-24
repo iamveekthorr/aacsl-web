@@ -10,6 +10,7 @@ import { interceptor } from '@/axios.config';
 import { clearItems, getItemFromStorage } from '@/utils/local-storage.util';
 import STORAGE_KEYS from '@/utils/storage-keys.util';
 import { ApiResponse } from '@/interfaces/api-response.interface';
+import { useToast } from '@/app/toast.provider';
 
 const getUserById = async (id?: string) => {
   if (!id) return null;
@@ -27,16 +28,21 @@ const useGetUserById = (id: string | undefined) => {
 
   const router = useRouter();
 
+  const { showToast } = useToast();
+
   return useQuery([QueryKeys.GET_USER_BY_ID, id], () => getUserById(id), {
     enabled: !!getItemFromStorage(STORAGE_KEYS.TOKEN),
     keepPreviousData: true,
-    onError: async (err) => {
+    onError: async (err: any) => {
       if (err instanceof AxiosError) {
         if (err.response?.status === 401 && user.currentUser) {
+          showToast(err.response?.data.message);
           user.resetState();
           router.push('/login');
           clearItems();
         }
+      } else {
+        showToast(err.message);
       }
     },
   });

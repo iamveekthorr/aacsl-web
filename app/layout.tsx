@@ -1,8 +1,11 @@
 import { Inter } from 'next/font/google';
 
-import '@/styles/globals.css';
-import Provider from './provider';
 import StyledComponentsRegistry from '@/lib/registry';
+import '@/styles/globals.css';
+
+import Provider from './provider';
+import { ToastProvider } from './toast.provider';
+import ToastComponent from '@/components/toast/toast.component';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -17,14 +20,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        <Provider>
-          <main>
-            <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
-          </main>
-        </Provider>
-      </body>
-    </html>
+    <ToastProvider>
+      <html lang="en">
+        <body className={inter.className}>
+          <Provider>
+            <main>
+              <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
+            </main>
+          </Provider>
+          <ToastComponent />
+        </body>
+      </html>
+    </ToastProvider>
   );
 }

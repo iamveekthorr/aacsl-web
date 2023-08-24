@@ -21,10 +21,9 @@ const Guard: FC<{ children: ReactElement }> = ({ children }) => {
     const path = url?.split('?')[0];
     if (path && !user?.tokens.accessToken && !publicPaths.includes(path)) {
       router.push(`/`);
+    } else if (user && user?.user.role !== 'ADMIN') {
+      router.push(`/`);
     }
-    //  else if (user && user?.user.role !== 'ADMIN') {
-    //   router.push(`/`);
-    // }
   };
   return children;
 };

@@ -12,7 +12,6 @@ export const StyledButton = styled.button<{ $primary?: boolean }>`
   padding: 1rem 2rem;
   /* transition: all 200ms ease-in-out; */
   width: 100%;
-  margin-top: 1rem;
   text-transform: capitalize;
   display: block;
   cursor: pointer;

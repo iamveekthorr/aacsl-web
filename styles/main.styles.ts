@@ -178,3 +178,18 @@ export const StyledGridItem = styled.div<{ $color: string }>`
     font-size: 1rem;
   }
 `;
+
+export const FormButtonContainer = styled.div`
+  display: flex;
+  align-items: center;
+  & > :first-child {
+    margin-right: auto;
+    font-weight: bold;
+    text-transform: capitalize;
+    cursor: pointer;
+  }
+
+  & > button {
+    width: auto;
+  }
+`;
