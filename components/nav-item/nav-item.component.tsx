@@ -4,7 +4,7 @@ import { StyledNavItem } from './nav-item.styles';
 
 export const SideNavItemComponent: React.FC<{
   children: React.ReactElement;
-  active: boolean;
+  active?: boolean;
   changeRoute: () => void;
 }> = ({ children, active, changeRoute }) => {
   return (

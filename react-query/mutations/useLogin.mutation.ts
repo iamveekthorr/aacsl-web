@@ -7,46 +7,35 @@ import { interceptor } from '@/axios.config';
 import { useUserStore } from '@/states/user.states';
 import QueryKeys from '@/utils/query-keys.util';
 
-import User from '@/interfaces/user.interface';
-
-import { clearItems, saveItemToLocalStorage } from '@/utils/local-storage.util';
+import { saveItemToLocalStorage } from '@/utils/local-storage.util';
 
 import STORAGE_KEYS from '@/utils/storage-keys.util';
+import { toast } from '@/components/toast/notification.component';
 
-import { useToast } from '@/app/toast.provider';
-
-const login = async ({
-  email,
-  password,
-}: {
-  [key: string]: string;
-}): Promise<User> => {
+const login = async ({ email, password }: { [key: string]: string }) => {
   const response = await interceptor.post('/auth/login', {
     email,
     password,
   });
 
-  return response.data.data;
+  return response.data;
 };
 
 const useLogin = () => {
   const router = useRouter();
   const user = useUserStore();
-  const { showToast } = useToast();
 
   return useMutation(login, {
     mutationKey: [QueryKeys.LOGIN],
     onSuccess: (data) => {
-      user.updateUser({ ...data });
-
-      showToast(
-        'You have been logged in successfully. You would be redirected shortly. 🚀'
-      );
+      toast.success(data?.status, { delay: 3000 });
+      user.updateUser({ ...data.data });
 
       saveItemToLocalStorage(
         STORAGE_KEYS.TOKEN,
-        !!data.tokens.accessToken && data.tokens.accessToken.length > 0
-          ? data.tokens.accessToken
+        !!data.data.tokens.accessToken &&
+          data.data.tokens.accessToken.length > 0
+          ? data.data.tokens.accessToken
           : ''
       );
 
@@ -56,15 +45,10 @@ const useLogin = () => {
     },
     onError: async (err: any) => {
       if (err instanceof AxiosError) {
-        showToast(err.response?.data.message);
-        if (err.response?.status === 401 && user.currentUser) {
-          user.resetState();
-          router.push('/login');
-          clearItems();
-        }
-      } else {
-        showToast(err?.message);
-      }
+        if (err.response?.data?.data instanceof Array) {
+          toast.error(err.response?.data?.data[0]?.constraints[0]);
+        } else toast.error(err?.response?.data.message);
+      } else toast.error(err?.message);
     },
   });
 };

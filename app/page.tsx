@@ -78,7 +78,9 @@ export default function Login() {
 
           <p>
             If you do not have an account, please{' '}
-            <Link href="/sign-up">sign up</Link>
+            <Link href="/sign-up" style={{ color: 'blue' }}>
+              sign up
+            </Link>
           </p>
         </StyledForm>
       </div>

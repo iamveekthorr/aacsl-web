@@ -1,21 +1,18 @@
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import { Id, toast } from 'react-toastify';
 import { AxiosError } from 'axios';
 
 import { interceptor } from '@/axios.config';
 
 import QueryKeys from '@/utils/query-keys.util';
+import { toast } from '@/components/toast/notification.component';
 
-import User from '@/interfaces/user.interface';
-
-const signup = async (data: { [key: string]: string }): Promise<User> => {
-  console.log(data, 'signup data');
+const signup = async (data: { [key: string]: string }) => {
   const response = await interceptor.post('/auth/signup?role=ADMIN', {
     ...data,
   });
 
-  return response.data.data;
+  return response.data;
 };
 
 const useSignUp = () => {
@@ -24,22 +21,17 @@ const useSignUp = () => {
   return useMutation(signup, {
     mutationKey: [QueryKeys.SIGNUP],
     onSuccess: (data) => {
+      toast.success(data.data, { delay: 3000 });
       setTimeout(() => {
         router.push('/verify-otp');
       }, 3000);
     },
     onError: async (err: any) => {
-      let toastId: undefined | Id;
-
       if (err instanceof AxiosError) {
-        toastId = toast.error(err.response?.data.message);
-      } else {
-        toastId = toast.error(err?.message);
-      }
-
-      setTimeout(() => {
-        toast.dismiss(toastId);
-      }, 3000);
+        if (err.response?.data?.data instanceof Array) {
+          toast.error(err.response?.data?.data[0]?.constraints[0]);
+        } else toast.error(err?.response?.data.message);
+      } else toast.error(err?.message);
     },
   });
 };

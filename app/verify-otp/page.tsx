@@ -1,15 +1,19 @@
 'use client';
 import React from 'react';
 import Button from '@/components/button/button.component';
+import { toast } from '@/components/toast/notification.component';
 
 import styles from '@/styles/login.module.css';
-import ShowView from '@/components/show-view/show-view.component';
 import { StyledForm } from '@/components/form/form.styles';
-import useSignUp from '@/react-query/mutations/useSignUp.mutation';
 import OTPInput from '@/components/otp/otp-input.component';
+import useVerifyOTP from '@/react-query/mutations/useVerifyOTP.mutation';
+import { useUserStore } from '@/states/user.states';
+import useRequestOTP from '@/react-query/mutations/useRequestOTP.mutation';
 
 export default function OTPPage() {
-  const { mutateAsync: signUp } = useSignUp();
+  const { mutateAsync: validateOTPInput } = useVerifyOTP();
+  const { mutateAsync: requestOTP } = useRequestOTP();
+  const email = useUserStore((state) => state.currentUser?.user.email);
 
   const [otp, setOtp] = React.useState<string>('');
   const [isInvalid, setIsInvalid] = React.useState<boolean>(false);
@@ -19,11 +23,29 @@ export default function OTPPage() {
     setIsInvalid(false); // Reset invalid state
   };
 
+  const handleRequestOTP = async () => {
+    if (!email) {
+      toast.error('No email registered yet!', { delay: 3000 });
+      return;
+    }
+
+    await requestOTP({ email, purpose: '' });
+  };
+
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
     if (otp !== '') {
-      // Example: Replace '123456' with your actual OTP
+      if (!email) {
+        toast.error('No email registered yet!', { delay: 3000 });
+        return;
+      }
+
+      await validateOTPInput({
+        otp,
+        email,
+        purpose: 'account verification',
+      });
     } else {
       setIsInvalid(true);
     }
@@ -49,6 +71,16 @@ export default function OTPPage() {
         <StyledForm style={{ fontFamily: 'inherit' }} onSubmit={handleSubmit}>
           <OTPInput onComplete={handleOtpComplete} />
           <Button text="next" btnType="submit" />
+          <p
+            onClick={handleRequestOTP}
+            style={{
+              cursor: 'pointer',
+              textTransform: 'capitalize',
+              userSelect: 'none',
+            }}
+          >
+            didn&apos;t get one?. click here
+          </p>
         </StyledForm>
       </div>
     </section>

@@ -1,10 +1,11 @@
 'use client';
 
 import React from 'react';
-import Button from '@/components/button/button.component';
+import { useRouter } from 'next/navigation';
 
 import styles from '@/styles/login.module.css';
 import { useForm } from '@/hooks/useForm.hook';
+import Button from '@/components/button/button.component';
 import ShowView from '@/components/show-view/show-view.component';
 import { StyledForm } from '@/components/form/form.styles';
 import useSignUp from '@/react-query/mutations/useSignUp.mutation';
@@ -64,16 +65,17 @@ export default function SignUp() {
       if (formValues.password !== formValues.passwordConfirm) {
         setPasswordMismatchError('password and password confirm must match');
       } else {
-        setFormData({ ...formValues });
         setPasswordMismatchError(undefined);
       }
+      setFormData({ ...formValues, ...values });
       setUserEmail(formData.email);
-      console.log(formData);
       await signUp({ ...formData });
       resetForm();
       formReset();
     }
   };
+
+  const router = useRouter();
 
   return (
     <section
@@ -145,7 +147,10 @@ export default function SignUp() {
                 <p>{formErrors?.department}</p>
               </ShowView>
             </div>
-            <Button text="next" btnType="submit" />
+            <FormButtonContainer>
+              <p onClick={() => router.push('/')}>back</p>
+              <Button text="next" btnType="submit" />
+            </FormButtonContainer>
           </StyledForm>
         </ShowView>
 

@@ -10,7 +10,8 @@ import { interceptor } from '@/axios.config';
 import { clearItems, getItemFromStorage } from '@/utils/local-storage.util';
 import STORAGE_KEYS from '@/utils/storage-keys.util';
 import { ApiResponse } from '@/interfaces/api-response.interface';
-import { useToast } from '@/app/toast.provider';
+
+import { toast } from '@/components/toast/notification.component';
 
 const getUserById = async (id?: string) => {
   if (!id) return null;
@@ -28,22 +29,20 @@ const useGetUserById = (id: string | undefined) => {
 
   const router = useRouter();
 
-  const { showToast } = useToast();
-
   return useQuery([QueryKeys.GET_USER_BY_ID, id], () => getUserById(id), {
     enabled: !!getItemFromStorage(STORAGE_KEYS.TOKEN),
     keepPreviousData: true,
     onError: async (err: any) => {
       if (err instanceof AxiosError) {
         if (err.response?.status === 401 && user.currentUser) {
-          showToast(err.response?.data.message);
           user.resetState();
-          router.push('/login');
+          router.push('/');
           clearItems();
         }
-      } else {
-        showToast(err.message);
-      }
+        if (err.response?.data?.data instanceof Array) {
+          toast.error(err.response?.data?.data[0]?.constraints[0]);
+        } else toast.error(err?.response?.data.message);
+      } else toast.error(err?.message);
     },
   });
 };

@@ -14,6 +14,7 @@ import OrganizationsActive from '@/public/business-active.svg';
 import Payments from '@/public/payment.svg';
 import PaymentsActive from '@/public/payment-active.svg';
 import ShowView from '../show-view/show-view.component';
+import { useUserStore } from '@/states/user.states';
 
 const checkPathName = (path: string, currentPath: string): boolean =>
   path === currentPath;
@@ -21,6 +22,8 @@ const checkPathName = (path: string, currentPath: string): boolean =>
 export const NavigationComponent = () => {
   const pathName = usePathname();
   const navigate = useRouter();
+  const { resetState } = useUserStore();
+
   return (
     <StyledTopNavBackground>
       <SideNavItemComponent
@@ -99,6 +102,14 @@ export const NavigationComponent = () => {
           </ShowView>
           <div>transactions</div>
         </>
+      </SideNavItemComponent>
+      <SideNavItemComponent
+        changeRoute={() => {
+          navigate.push('/');
+          resetState();
+        }}
+      >
+        <div>log out</div>
       </SideNavItemComponent>
     </StyledTopNavBackground>
   );

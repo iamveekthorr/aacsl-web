@@ -5,7 +5,6 @@ import {
   forwardRef,
   ReactElement,
   ReactNode,
-  useCallback,
   useEffect,
   useImperativeHandle,
   useRef,
@@ -16,7 +15,7 @@ import { createPortal } from 'react-dom';
 
 import { ModalBG, ModalContentContainer, ModalOverlay } from './modal.styles';
 
-import useClickOutside from '../../hooks/useClickOutside.hook';
+import useClickOutside from '@/hooks/useClickOutside.hook';
 
 type ModalProps = {
   children: ReactNode;
