@@ -37,7 +37,6 @@ const useGetMileageById = (id: string | undefined) => {
         if (err.response?.status === 401 && user.currentUser) {
           user.resetState();
           router.push('/');
-          router.push('/');
           clearItems();
         } else toast.error(err.response?.data?.message);
       } else toast.error(err?.message);
