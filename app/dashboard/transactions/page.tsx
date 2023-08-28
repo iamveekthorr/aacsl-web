@@ -4,6 +4,7 @@ import React from 'react';
 import useGetAllTransactions from '@/react-query/query/useGetAllTransactions.query';
 
 import { truncateText } from '@/utils/truncate-text.utils';
+import { formatDate } from '@/utils/format-date.util';
 
 import {
   StyledMileageBg,
@@ -17,16 +18,32 @@ import {
   StyledControlButton,
   StyledPaginationContainer,
   SearchInput,
+  StyledFilterIcon,
+  ModalHeadingTextContainer,
+  StyledBusinessName,
+  StyledDateFilteringContainer,
+  StyledLabel,
+  StyledDatePickerInput,
 } from '@/styles/main.styles';
+import styles from '@/styles/date-picker.module.css';
 
 import PaymentsActive from '@/public/payment-active.svg';
+import FilterIcon from '@/public/filter.svg';
+
 import { useDebounce } from '@/hooks/useDebounce.hook';
-import { formatDate } from '@/utils/format-date.util';
+
+import Modal from '@/components/modal/modal.component';
+import { StyledForm } from '@/components/form/form.styles';
+import Button from '@/components/button/button.component';
 
 const Transactions = () => {
   const [currentPage, setCurrentPage] = React.useState(1);
 
   const [searchText, setSearchText] = React.useState('');
+  const [startDate, setStartDate] = React.useState<Date | null>();
+  const [endDate, setEndDate] = React.useState<Date | null>();
+
+  const datePickerRef = React.useRef<any>(null);
 
   const debouncedSearchText = useDebounce(searchText, 200);
 
@@ -55,6 +72,10 @@ const Transactions = () => {
   const { data } = useGetAllTransactions(
     `page=${currentPage}${
       debouncedSearchText && `&transActionId=${debouncedSearchText}`
+    }${
+      endDate && startDate
+        ? `&endDate=${endDate.toISOString()}&startDate=${startDate.toISOString()}`
+        : ''
     }`
   );
 
@@ -80,6 +101,79 @@ const Transactions = () => {
           value={searchText}
           onChange={handleSearchInputChange}
         />
+        <Modal
+          ref={datePickerRef}
+          trigger={
+            <StyledFilterIcon>
+              <FilterIcon />
+            </StyledFilterIcon>
+          }
+        >
+          <>
+            <ModalHeadingTextContainer>
+              <StyledBusinessName>
+                Please select dates for filtering
+              </StyledBusinessName>
+            </ModalHeadingTextContainer>
+            <StyledDateFilteringContainer>
+              <>
+                <StyledForm>
+                  <div>
+                    <StyledLabel htmlFor="startDate">
+                      select start date
+                    </StyledLabel>
+                    <StyledDatePickerInput
+                      selected={startDate}
+                      onChange={(date, e) => {
+                        e?.persist();
+                        e?.stopPropagation();
+                        setStartDate(date);
+                      }}
+                      startDate={startDate}
+                      selectsStart
+                      name="startDate"
+                      wrapperClassName={styles.date_picker}
+                    />
+                  </div>
+                  <div>
+                    <StyledLabel htmlFor="startDate">
+                      select end date
+                    </StyledLabel>
+                    <StyledDatePickerInput
+                      selected={endDate}
+                      onChange={(date, e) => {
+                        e?.persist();
+                        e?.stopPropagation();
+                        setEndDate(date);
+                      }}
+                      name="endDate"
+                      endDate={endDate}
+                      selectsEnd
+                      wrapperClassName={styles.date_picker}
+                    />
+                  </div>
+                  <Button
+                    text="search by date"
+                    handleClick={(e) => {
+                      e?.preventDefault();
+                      datePickerRef.current?.close();
+                    }}
+                  />
+                  <Button
+                    text="reset"
+                    primary
+                    handleClick={(e) => {
+                      e?.preventDefault();
+                      setEndDate(undefined);
+                      setStartDate(undefined);
+                      datePickerRef.current?.close();
+                    }}
+                  />
+                </StyledForm>
+              </>
+            </StyledDateFilteringContainer>
+          </>
+        </Modal>
         <StyledControls>
           <StyledControlButton onClick={handlePreviousPage}>
             &lt;

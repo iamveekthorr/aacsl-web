@@ -8,12 +8,14 @@ const Button: FC<{
   disabled?: boolean;
   btnType?: 'button' | 'submit' | 'reset' | undefined;
   primary?: boolean;
-}> = ({ text, disabled, primary, btnType, ...otherProps }) => {
+  handleClick?: (e?: React.SyntheticEvent) => void;
+}> = ({ text, disabled, primary, btnType, handleClick, ...otherProps }) => {
   return (
     <StyledButton
       disabled={disabled}
       type={btnType ? btnType : 'button'}
       $primary={primary}
+      onClick={handleClick}
       {...otherProps}
     >
       {text}

@@ -15,7 +15,7 @@ import { toast } from '@/components/toast/notification.component';
 
 const getAllTransactions = async (query?: string) => {
   const response = await interceptor.get(
-    `/payments?${query ? `?${query}` : ''}`,
+    `/payments${query ? `?${query}` : ''}`,
     {
       headers: {
         Authorization: `Bearer ${getItemFromStorage(STORAGE_KEYS.TOKEN)}`,
@@ -42,9 +42,6 @@ const useGetAllTransactions = (query?: string) => {
             user.resetState();
             router.push('/');
             clearItems();
-          }
-          if (err.response?.data?.data instanceof Array) {
-            toast.error(err.response?.data?.data[0]?.constraints[0]);
           } else toast.error(err?.response?.data.message);
         } else toast.error(err?.message);
       },

@@ -5,7 +5,6 @@ import {
   StyledUserActiveContainer,
 } from './header.styles';
 
-import Logo from '@/public/logo-AACSL.png';
 import { useUserStore } from '@/states/user.states';
 import useIsomorphicLayoutEffect from '@/hooks/useIsomorphicLayoutEffect.hook';
 
@@ -25,12 +24,14 @@ export const HeaderComponent = () => {
 
   return (
     <StyledTopNavBackground>
-      <div style={{ height: '2rem' }}>
+      <div>
         <Image
-          src={Logo}
+          src={'https://images2.imgbox.com/30/4e/Me2ogn5A_o.png'}
           alt="AACSL company logo"
           priority={true}
           placeholder="empty"
+          width={100}
+          height={100}
         />
       </div>
       <StyledUserActiveContainer>

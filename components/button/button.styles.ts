@@ -20,4 +20,13 @@ export const StyledButton = styled.button<{ $primary?: boolean }>`
   /* &:hover {
     filter: brightness(0.85);
   } */
+
+  ${({ $primary }) =>
+    $primary &&
+    `
+    color: #2f80ed;
+  border: 3px solid #2f80ed;
+  background: transparent;
+  
+  `}
 `;

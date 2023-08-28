@@ -2,10 +2,7 @@
 import React, { useEffect } from 'react';
 import Link from 'next/link';
 
-import useGetAllUsers from '@/react-query/query/useGetAllUsers.query';
 import { UserDetails } from '@/interfaces/user.interface';
-
-import { truncateText } from '@/utils/truncate-text.utils';
 
 import {
   StyledMileageBg,
@@ -26,15 +23,29 @@ import {
   StyledDetailsHeading,
   StyledDetailsItem,
   StyledDataDetails,
+  StyledFilterIcon,
+  StyledLabel,
+  StyledDatePickerInput,
+  StyledDateFilteringContainer,
 } from '@/styles/main.styles';
+import styles from '@/styles/date-picker.module.css';
+
+import { truncateText } from '@/utils/truncate-text.utils';
+import { formatDate } from '@/utils/format-date.util';
+import { capitalizeFirstLetters } from '@/utils/capitalize-first-letter';
+
+import useGetAllUsers from '@/react-query/query/useGetAllUsers.query';
+import useGetUserById from '@/react-query/query/useGetUserById.query';
+
+import { useDebounce } from '@/hooks/useDebounce.hook';
+
+import ShowView from '@/components/show-view/show-view.component';
+import Modal from '@/components/modal/modal.component';
+import { StyledForm } from '@/components/form/form.styles';
+import Button from '@/components/button/button.component';
 
 import PeopleActive from '@/public/people-active.svg';
-import { useDebounce } from '@/hooks/useDebounce.hook';
-import { formatDate } from '@/utils/format-date.util';
-import Modal from '@/components/modal/modal.component';
-import ShowView from '@/components/show-view/show-view.component';
-import useGetUserById from '@/react-query/query/useGetUserById.query';
-import { capitalizeFirstLetters } from '@/utils/capitalize-first-letter';
+import FilterIcon from '@/public/filter.svg';
 
 const Users = () => {
   const [currentPage, setCurrentPage] = React.useState(1);
@@ -43,7 +54,11 @@ const Users = () => {
     undefined
   );
 
+  const [startDate, setStartDate] = React.useState<Date | null>();
+  const [endDate, setEndDate] = React.useState<Date | null>();
+
   const modalRef = React.useRef<any>(null);
+  const datePickerRef = React.useRef<any>(null);
 
   const debouncedSearchText = useDebounce(searchText, 200);
 
@@ -72,6 +87,10 @@ const Users = () => {
   const { data } = useGetAllUsers(
     `page=${currentPage}${
       debouncedSearchText && `&email=${debouncedSearchText}`
+    }${
+      endDate && startDate
+        ? `&endDate=${endDate.toISOString()}&startDate=${startDate.toISOString()}`
+        : ''
     }`
   );
 
@@ -104,6 +123,79 @@ const Users = () => {
             value={searchText}
             onChange={handleSearchInputChange}
           />
+          <Modal
+            ref={datePickerRef}
+            trigger={
+              <StyledFilterIcon>
+                <FilterIcon />
+              </StyledFilterIcon>
+            }
+          >
+            <>
+              <ModalHeadingTextContainer>
+                <StyledBusinessName>
+                  Please select dates for filtering
+                </StyledBusinessName>
+              </ModalHeadingTextContainer>
+              <StyledDateFilteringContainer>
+                <>
+                  <StyledForm>
+                    <div>
+                      <StyledLabel htmlFor="startDate">
+                        select start date
+                      </StyledLabel>
+                      <StyledDatePickerInput
+                        selected={startDate}
+                        onChange={(date, e) => {
+                          e?.persist();
+                          e?.stopPropagation();
+                          setStartDate(date);
+                        }}
+                        startDate={startDate}
+                        selectsStart
+                        name="startDate"
+                        wrapperClassName={styles.date_picker}
+                      />
+                    </div>
+                    <div>
+                      <StyledLabel htmlFor="startDate">
+                        select end date
+                      </StyledLabel>
+                      <StyledDatePickerInput
+                        selected={endDate}
+                        onChange={(date, e) => {
+                          e?.persist();
+                          e?.stopPropagation();
+                          setEndDate(date);
+                        }}
+                        name="endDate"
+                        endDate={endDate}
+                        selectsEnd
+                        wrapperClassName={styles.date_picker}
+                      />
+                    </div>
+                    <Button
+                      text="search by date"
+                      handleClick={(e) => {
+                        e?.preventDefault();
+                        datePickerRef.current?.close();
+                      }}
+                    />
+                    <Button
+                      text="reset"
+                      primary
+                      handleClick={(e) => {
+                        e?.preventDefault();
+                        setEndDate(undefined);
+                        setStartDate(undefined);
+                        datePickerRef.current?.close();
+                      }}
+                    />
+                  </StyledForm>
+                </>
+              </StyledDateFilteringContainer>
+            </>
+          </Modal>
           <StyledControls>
             <StyledControlButton onClick={handlePreviousPage}>
               &lt;

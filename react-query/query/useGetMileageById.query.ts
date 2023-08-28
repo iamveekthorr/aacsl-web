@@ -34,15 +34,12 @@ const useGetMileageById = (id: string | undefined) => {
     keepPreviousData: true,
     onError: async (err: any) => {
       if (err instanceof AxiosError) {
-        console.log(err.response?.data.message);
         if (err.response?.status === 401 && user.currentUser) {
           user.resetState();
           router.push('/');
+          router.push('/');
           clearItems();
-        }
-        if (err.response?.data?.data instanceof Array) {
-          toast.error(err.response?.data?.data[0]?.constraints[0]);
-        } else toast.error(err?.response?.data.message);
+        } else toast.error(err.response?.data?.message);
       } else toast.error(err?.message);
     },
   });

@@ -7,11 +7,12 @@ import QueryKeys from '@/utils/query-keys.util';
 
 import { interceptor } from '@/axios.config';
 
+import { toast } from '@/components/toast/notification.component';
+
 import { clearItems, getItemFromStorage } from '@/utils/local-storage.util';
 import STORAGE_KEYS from '@/utils/storage-keys.util';
-import { ApiResponse } from '@/interfaces/api-response.interface';
 
-import { toast } from '@/components/toast/notification.component';
+import { ApiResponse } from '@/interfaces/api-response.interface';
 
 const getUserById = async (id?: string) => {
   if (!id) return null;
@@ -38,10 +39,7 @@ const useGetUserById = (id: string | undefined) => {
           user.resetState();
           router.push('/');
           clearItems();
-        }
-        if (err.response?.data?.data instanceof Array) {
-          toast.error(err.response?.data?.data[0]?.constraints[0]);
-        } else toast.error(err?.response?.data.message);
+        } else toast.error(err.response?.data?.message);
       } else toast.error(err?.message);
     },
   });

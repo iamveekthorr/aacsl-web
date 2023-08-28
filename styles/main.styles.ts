@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { DatePickerComponent } from '../components/date-picker/date-picker.component';
 
 export const StyledMileageBg = styled.section`
   padding: 1rem;
@@ -191,5 +192,45 @@ export const FormButtonContainer = styled.div`
 
   & > button {
     width: auto;
+  }
+`;
+
+export const StyledFilterIcon = styled.div`
+  background: rgba(47, 128, 237, 0.2);
+  border-radius: 3px;
+  height: 2rem;
+  width: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 1rem;
+  cursor: pointer;
+
+  & > svg {
+    height: 1rem;
+    width: 1rem;
+    fill: #2f80ed;
+  }
+`;
+
+export const StyledDateFilteringContainer = styled.section`
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+`;
+
+export const StyledLabel = styled.label`
+  font-size: 0.7rem;
+  font-family: inherit;
+  text-transform: capitalize;
+`;
+
+export const StyledDatePickerInput = styled(DatePickerComponent)`
+  height: 3rem;
+  padding: 1rem;
+  margin-top: 0.6rem;
+  width: 100%;
+  &:focus {
+    outline: #2f80ed;
   }
 `;

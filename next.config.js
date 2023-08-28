@@ -14,10 +14,13 @@ const nextConfig = {
       cssProp: true,
     },
   },
+  images: {
+    domains: ['images2.imgbox.com'],
+  },
   env: {
     apiStaging: 'https://aacsl-prod-web-app.azurewebsites.net/v1',
     apiLocal: 'http://127.0.0.1:3000/v1',
-    environment: 'production',
+    environment: 'development',
   },
 };
 

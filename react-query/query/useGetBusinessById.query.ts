@@ -35,14 +35,10 @@ const useGetOrganization = (id: string | undefined) => {
     onError: async (err: any) => {
       if (err instanceof AxiosError) {
         if (err.response?.status === 401 && user.currentUser) {
-          console.log(err?.message);
           user.resetState();
           router.push('/');
           clearItems();
-        }
-        if (err.response?.data?.data instanceof Array) {
-          toast.error(err.response?.data?.data[0]?.constraints[0]);
-        } else toast.error(err?.response?.data.message);
+        } else toast.error(err.response?.data?.message);
       } else toast.error(err?.message);
     },
   });
