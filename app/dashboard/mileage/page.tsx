@@ -65,7 +65,8 @@ const Mileage = () => {
   const debouncedSearchText = useDebounce(searchText, 200);
 
   const url = `page=${currentPage}${
-    debouncedSearchText && `&business=companyName1#${debouncedSearchText}`
+    debouncedSearchText &&
+    `&business=${encodeURIComponent(`companyName1#${debouncedSearchText}`)}`
   }${
     endDate && startDate
       ? `&endDate=${endDate.toISOString()}&startDate=${startDate.toISOString()}`
