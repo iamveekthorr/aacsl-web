@@ -14,7 +14,7 @@ export default function Login() {
       initialValues: { email: '', password: '' },
       requiredFields: ['email', 'password'],
     });
-  const { mutateAsync: login } = useLogin();
+  const { mutateAsync: login, isLoading } = useLogin();
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -74,7 +74,10 @@ export default function Login() {
               <p>{errors?.password}</p>
             </ShowView>
           </div>
-          <Button text="login" btnType="submit" />
+          <Button btnType="submit">
+            <ShowView when={!isLoading}>login</ShowView>
+            <ShowView when={isLoading}>loading...</ShowView>
+          </Button>
 
           <p>
             If you do not have an account, please{' '}

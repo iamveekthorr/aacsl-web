@@ -234,3 +234,16 @@ export const StyledDatePickerInput = styled(DatePickerComponent)`
     outline: #2f80ed;
   }
 `;
+
+export const StyledTableRowNotFound = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 10rem;
+  text-transform: capitalize;
+  flex-direction: column;
+  font-size: 1rem;
+  & > :last-child {
+    margin-top: 1rem;
+  }
+`;

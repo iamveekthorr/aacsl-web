@@ -21,7 +21,7 @@ const useSignUp = () => {
   return useMutation(signup, {
     mutationKey: [QueryKeys.SIGNUP],
     onSuccess: (data) => {
-      toast.success(data.data, { delay: 3000 });
+      toast.success(data.data);
       setTimeout(() => {
         router.push('/verify-otp');
       }, 3000);

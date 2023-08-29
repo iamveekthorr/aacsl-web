@@ -28,7 +28,7 @@ const useLogin = () => {
   return useMutation(login, {
     mutationKey: [QueryKeys.LOGIN],
     onSuccess: (data) => {
-      toast.success(data?.status, { delay: 3000 });
+      toast.success(data?.status);
       user.updateUser({ ...data.data });
 
       saveItemToLocalStorage(

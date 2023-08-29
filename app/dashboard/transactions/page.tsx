@@ -1,5 +1,6 @@
 'use client';
 import React from 'react';
+import Image from 'next/image';
 
 import useGetAllTransactions from '@/react-query/query/useGetAllTransactions.query';
 
@@ -24,6 +25,7 @@ import {
   StyledDateFilteringContainer,
   StyledLabel,
   StyledDatePickerInput,
+  StyledTableRowNotFound,
 } from '@/styles/main.styles';
 import styles from '@/styles/date-picker.module.css';
 
@@ -35,6 +37,8 @@ import { useDebounce } from '@/hooks/useDebounce.hook';
 import Modal from '@/components/modal/modal.component';
 import { StyledForm } from '@/components/form/form.styles';
 import Button from '@/components/button/button.component';
+import Loading from '@/public/loading.gif';
+import NotFound from '@/public/smartphone.png';
 
 const Transactions = () => {
   const [currentPage, setCurrentPage] = React.useState(1);
@@ -69,7 +73,7 @@ const Transactions = () => {
     setSearchText(event.target.value);
   };
 
-  const { data } = useGetAllTransactions(
+  const { data, isLoading } = useGetAllTransactions(
     `page=${currentPage}${
       debouncedSearchText && `&transActionId=${debouncedSearchText}`
     }${
@@ -97,7 +101,7 @@ const Transactions = () => {
         </PaginationText>
         <SearchInput
           type="text"
-          placeholder="search by email..."
+          placeholder="search by transaction id..."
           value={searchText}
           onChange={handleSearchInputChange}
         />
@@ -153,14 +157,14 @@ const Transactions = () => {
                     />
                   </div>
                   <Button
-                    text="search by date"
                     handleClick={(e) => {
                       e?.preventDefault();
                       datePickerRef.current?.close();
                     }}
-                  />
+                  >
+                    search by date
+                  </Button>
                   <Button
-                    text="reset"
                     primary
                     handleClick={(e) => {
                       e?.preventDefault();
@@ -168,7 +172,9 @@ const Transactions = () => {
                       setStartDate(undefined);
                       datePickerRef.current?.close();
                     }}
-                  />
+                  >
+                    reset
+                  </Button>
                 </StyledForm>
               </>
             </StyledDateFilteringContainer>
@@ -186,51 +192,62 @@ const Transactions = () => {
           </StyledControlButton>
         </StyledControls>
       </StyledPaginationContainer>
-
-      <table
-        role="presentation"
-        width="100%"
-        cellPadding="0"
-        cellSpacing="0"
-        style={{
-          minWidth: '100%',
-          height: 'auto',
-          backgroundColor: '#ffffff !important',
-          textAlign: 'left',
-        }}
-      >
-        <thead
+      {data?.data?.count && data?.data?.count > 0 && !isLoading ? (
+        <table
+          role="presentation"
+          width="100%"
+          cellPadding="0"
+          cellSpacing="0"
           style={{
-            backgroundColor: ' #ffffff !important',
-            textTransform: 'capitalize',
+            minWidth: '100%',
+            height: 'auto',
+            backgroundColor: '#ffffff !important',
+            textAlign: 'left',
           }}
         >
-          <tr>
-            <StyledTableHead scope="col">transaction ID</StyledTableHead>
-            <StyledTableHead scope="col">transaction status</StyledTableHead>
-            <StyledTableHead scope="col">business name</StyledTableHead>
-            <StyledTableHead scope="col">description</StyledTableHead>
-            <StyledTableHead scope="col">amount</StyledTableHead>
-            <StyledTableHead scope="col">date</StyledTableHead>
-          </tr>
-        </thead>
-        <tbody>
-          {data?.data.documents?.map((m) => (
-            <tr key={m.id}>
-              <StyledTableData>{m.transactionId}</StyledTableData>
-              <StyledTableData>{String(m.transActionStatus)}</StyledTableData>
-              <StyledTableData>
-                {truncateText(m.companyName, 20)}
-              </StyledTableData>
-              <StyledTableData>{m.description}</StyledTableData>
-              <StyledTableData>{m.amount}</StyledTableData>
-              <StyledTableData>
-                {formatDate(new Date(m.createdAt))}
-              </StyledTableData>
+          <thead
+            style={{
+              backgroundColor: ' #ffffff !important',
+              textTransform: 'capitalize',
+            }}
+          >
+            <tr>
+              <StyledTableHead scope="col">transaction ID</StyledTableHead>
+              <StyledTableHead scope="col">transaction status</StyledTableHead>
+              <StyledTableHead scope="col">business name</StyledTableHead>
+              <StyledTableHead scope="col">description</StyledTableHead>
+              <StyledTableHead scope="col">amount</StyledTableHead>
+              <StyledTableHead scope="col">date</StyledTableHead>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {data?.data.documents?.map((m) => (
+              <tr key={m.id}>
+                <StyledTableData>{m.transactionId}</StyledTableData>
+                <StyledTableData>{String(m.transActionStatus)}</StyledTableData>
+                <StyledTableData>
+                  {truncateText(m.companyName, 20)}
+                </StyledTableData>
+                <StyledTableData>{m.description}</StyledTableData>
+                <StyledTableData>{m.amount}</StyledTableData>
+                <StyledTableData>
+                  {formatDate(new Date(m.createdAt))}
+                </StyledTableData>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      ) : isLoading ? (
+        <StyledTableRowNotFound>
+          <Image height="100" width="100" src={Loading} alt="loading gif" />
+          <p>fetching data...</p>
+        </StyledTableRowNotFound>
+      ) : (
+        <StyledTableRowNotFound>
+          <Image height="100" width="100" src={NotFound} alt="loading gif" />
+          <p>no data found</p>
+        </StyledTableRowNotFound>
+      )}
     </StyledMileageBg>
   );
 };

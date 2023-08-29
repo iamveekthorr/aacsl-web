@@ -1,5 +1,6 @@
 'use client';
 import React from 'react';
+import Image from 'next/image';
 
 import useGetAllMileage from '@/react-query/query/useGetAllMileage.query';
 import useGetMileageById from '@/react-query/query/useGetMileageById.query';
@@ -30,6 +31,7 @@ import {
   StyledDateFilteringContainer,
   StyledLabel,
   StyledDatePickerInput,
+  StyledTableRowNotFound,
 } from '@/styles/main.styles';
 import styles from '@/styles/date-picker.module.css';
 
@@ -43,6 +45,8 @@ import ShowView from '@/components/show-view/show-view.component';
 import MileageActive from '@/public/driving-active.svg';
 import OrganizationActive from '@/public/business-active.svg';
 import FilterIcon from '@/public/filter.svg';
+import Loading from '@/public/loading.gif';
+import NotFound from '@/public/smartphone.png';
 
 const Mileage = () => {
   const [locations, setLocations] = React.useState<Array<any> | undefined>([]);
@@ -61,14 +65,14 @@ const Mileage = () => {
   const debouncedSearchText = useDebounce(searchText, 200);
 
   const url = `page=${currentPage}${
-    debouncedSearchText && `&business=${debouncedSearchText}`
+    debouncedSearchText && `&business=companyName1#${debouncedSearchText}`
   }${
     endDate && startDate
       ? `&endDate=${endDate.toISOString()}&startDate=${startDate.toISOString()}`
       : ''
   }`;
 
-  const { data } = useGetAllMileage(url);
+  const { data, isLoading } = useGetAllMileage(url);
 
   const { data: mileage } = useGetMileageById(selectedRow);
 
@@ -116,7 +120,7 @@ const Mileage = () => {
 
           <SearchInput
             type="text"
-            placeholder="search by email..."
+            placeholder="search by business name..."
             value={searchText}
             onChange={handleSearchInputChange}
           />
@@ -173,14 +177,14 @@ const Mileage = () => {
                       />
                     </div>
                     <Button
-                      text="search by date"
                       handleClick={(e) => {
                         e?.preventDefault();
                         datePickerRef.current?.close();
                       }}
-                    />
+                    >
+                      search by date
+                    </Button>
                     <Button
-                      text="reset"
                       primary
                       handleClick={(e) => {
                         e?.preventDefault();
@@ -188,7 +192,9 @@ const Mileage = () => {
                         setStartDate(undefined);
                         datePickerRef.current?.close();
                       }}
-                    />
+                    >
+                      reset
+                    </Button>
                   </StyledForm>
                 </>
               </StyledDateFilteringContainer>
@@ -208,56 +214,68 @@ const Mileage = () => {
           </StyledControls>
         </StyledPaginationContainer>
 
-        <table
-          role="presentation"
-          width="100%"
-          cellPadding="0"
-          cellSpacing="0"
-          style={{
-            minWidth: '100%',
-            height: 'auto',
-            backgroundColor: '#ffffff !important',
-            textAlign: 'left',
-          }}
-        >
-          <thead
+        {data?.data?.count && data?.data?.count > 0 && !isLoading ? (
+          <table
+            role="presentation"
+            width="100%"
+            cellPadding="0"
+            cellSpacing="0"
             style={{
-              backgroundColor: ' #ffffff !important',
-              textTransform: 'capitalize',
+              minWidth: '100%',
+              height: 'auto',
+              backgroundColor: '#ffffff !important',
+              textAlign: 'left',
             }}
           >
-            <tr>
-              <StyledTableHead scope="col">business ID</StyledTableHead>
-              <StyledTableHead scope="col">round trip</StyledTableHead>
-              <StyledTableHead scope="col">purpose of trip</StyledTableHead>
-              <StyledTableHead scope="col">start post code</StyledTableHead>
-              <StyledTableHead scope="col">end post code</StyledTableHead>
-              <StyledTableHead scope="col">distance covered</StyledTableHead>
-              <StyledTableHead scope="col">date</StyledTableHead>
-            </tr>
-          </thead>
-          <tbody>
-            {locations?.map((m) => (
-              <tr
-                key={m.id}
-                onClick={() => {
-                  setSelectedRow(m.id);
-                  modalRef.current.open();
-                }}
-              >
-                <StyledTableData>{truncateText(m.id, 15)}</StyledTableData>
-                <StyledTableData>{String(m.roundTrip)}</StyledTableData>
-                <StyledTableData>
-                  {truncateText(m.purposeOfTrip, 20)}
-                </StyledTableData>
-                <StyledTableData>{m.startPostCode}</StyledTableData>
-                <StyledTableData>{m.endPostCode}</StyledTableData>
-                <StyledTableData>{m.distance} miles</StyledTableData>
-                <StyledTableData>{formatDate(m.createdAt)}</StyledTableData>
+            <thead
+              style={{
+                backgroundColor: ' #ffffff !important',
+                textTransform: 'capitalize',
+              }}
+            >
+              <tr>
+                <StyledTableHead scope="col">business ID</StyledTableHead>
+                <StyledTableHead scope="col">round trip</StyledTableHead>
+                <StyledTableHead scope="col">purpose of trip</StyledTableHead>
+                <StyledTableHead scope="col">start post code</StyledTableHead>
+                <StyledTableHead scope="col">end post code</StyledTableHead>
+                <StyledTableHead scope="col">distance covered</StyledTableHead>
+                <StyledTableHead scope="col">date</StyledTableHead>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {locations?.map((m) => (
+                <tr
+                  key={m.id}
+                  onClick={() => {
+                    setSelectedRow(m.id);
+                    modalRef.current.open();
+                  }}
+                >
+                  <StyledTableData>{truncateText(m.id, 15)}</StyledTableData>
+                  <StyledTableData>{String(m.roundTrip)}</StyledTableData>
+                  <StyledTableData>
+                    {truncateText(m.purposeOfTrip, 20)}
+                  </StyledTableData>
+                  <StyledTableData>{m.startPostCode}</StyledTableData>
+                  <StyledTableData>{m.endPostCode}</StyledTableData>
+                  <StyledTableData>{m.distance} miles</StyledTableData>
+                  <StyledTableData>{formatDate(m.createdAt)}</StyledTableData>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : isLoading ? (
+          <StyledTableRowNotFound>
+            <Image height="100" width="100" src={Loading} alt="loading gif" />
+            <p>fetching data...</p>
+          </StyledTableRowNotFound>
+        ) : (
+          <StyledTableRowNotFound>
+            <Image height="100" width="100" src={NotFound} alt="loading gif" />
+            <p>no data found</p>
+          </StyledTableRowNotFound>
+        )}
       </StyledMileageBg>
       <Modal ref={modalRef} trigger={<></>}>
         <section>

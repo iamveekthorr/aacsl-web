@@ -149,7 +149,7 @@ export default function SignUp() {
             </div>
             <FormButtonContainer>
               <p onClick={() => router.push('/')}>back</p>
-              <Button text="next" btnType="submit" />
+              <Button btnType="submit">next</Button>
             </FormButtonContainer>
           </StyledForm>
         </ShowView>
@@ -208,7 +208,7 @@ export default function SignUp() {
             </div>
             <FormButtonContainer>
               <p onClick={handlePrevious}>back</p>
-              <Button text="sign up" btnType="submit" />
+              <Button btnType="submit">sign up</Button>
             </FormButtonContainer>
           </StyledForm>
         </ShowView>

@@ -70,7 +70,7 @@ export default function OTPPage() {
       >
         <StyledForm style={{ fontFamily: 'inherit' }} onSubmit={handleSubmit}>
           <OTPInput onComplete={handleOtpComplete} />
-          <Button text="next" btnType="submit" />
+          <Button btnType="submit">next</Button>
           <p
             onClick={handleRequestOTP}
             style={{

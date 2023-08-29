@@ -1,5 +1,6 @@
 'use client';
 import React from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 
 import { truncateText } from '@/utils/truncate-text.utils';
@@ -32,6 +33,7 @@ import {
   StyledDateFilteringContainer,
   StyledLabel,
   StyledDatePickerInput,
+  StyledTableRowNotFound,
 } from '@/styles/main.styles';
 
 import OrganizationActive from '@/public/business-active.svg';
@@ -44,6 +46,8 @@ import ShowView from '@/components/show-view/show-view.component';
 
 import { StyledForm } from '@/components/form/form.styles';
 import Button from '@/components/button/button.component';
+import Loading from '@/public/loading.gif';
+import NotFound from '@/public/smartphone.png';
 
 const Organizations = () => {
   const [currentPage, setCurrentPage] = React.useState(1);
@@ -81,9 +85,9 @@ const Organizations = () => {
     }
   };
 
-  const { data } = useGetAllBusinesses(
+  const { data, isLoading } = useGetAllBusinesses(
     `page=${currentPage}${
-      debouncedSearchText && `&companyName1=${debouncedSearchText}`
+      debouncedSearchText && `&companyName1=~${debouncedSearchText}`
     }${
       endDate && startDate
         ? `&endDate=${endDate.toISOString()}&startDate=${startDate.toISOString()}`
@@ -169,14 +173,14 @@ const Organizations = () => {
                       />
                     </div>
                     <Button
-                      text="search by date"
                       handleClick={(e) => {
                         e?.preventDefault();
                         datePickerRef.current?.close();
                       }}
-                    />
+                    >
+                      search by date
+                    </Button>
                     <Button
-                      text="reset"
                       primary
                       handleClick={(e) => {
                         e?.preventDefault();
@@ -184,7 +188,9 @@ const Organizations = () => {
                         setStartDate(undefined);
                         datePickerRef.current?.close();
                       }}
-                    />
+                    >
+                      reset
+                    </Button>
                   </StyledForm>
                 </>
               </StyledDateFilteringContainer>
@@ -204,62 +210,74 @@ const Organizations = () => {
           </StyledControls>
         </StyledPaginationContainer>
 
-        <table
-          role="presentation"
-          width="100%"
-          cellPadding="0"
-          cellSpacing="0"
-          style={{
-            minWidth: '100%',
-            height: 'auto',
-            backgroundColor: '#ffffff !important',
-            textAlign: 'left',
-          }}
-        >
-          <thead
+        {data?.data?.count && data?.data?.count > 0 && !isLoading ? (
+          <table
+            role="presentation"
+            width="100%"
+            cellPadding="0"
+            cellSpacing="0"
             style={{
-              backgroundColor: ' #ffffff !important',
-              textTransform: 'capitalize',
+              minWidth: '100%',
+              height: 'auto',
+              backgroundColor: '#ffffff !important',
+              textAlign: 'left',
             }}
           >
-            <tr>
-              <StyledTableHead scope="col">id</StyledTableHead>
-              <StyledTableHead scope="col">organization name</StyledTableHead>
-              <StyledTableHead scope="col">business type</StyledTableHead>
-              <StyledTableHead scope="col">business email</StyledTableHead>
-              <StyledTableHead scope="col">active</StyledTableHead>
-              <StyledTableHead scope="col">
-                date of registration
-              </StyledTableHead>
-            </tr>
-          </thead>
-          <tbody>
-            {data?.data.documents?.map((business) => (
-              <tr
-                key={business.id}
-                onClick={() => {
-                  setSelectedRow(business.id);
-                  modalRef.current.open();
-                }}
-              >
-                <StyledTableData>
-                  {truncateText(business.id, 15)}
-                </StyledTableData>
-                <StyledTableData>
-                  {truncateText(business.companyName1, 17)}
-                </StyledTableData>
-                <StyledTableData>{business.businessType}</StyledTableData>
-                <StyledTableData>{business.email}</StyledTableData>
-                <StyledTableData>
-                  {String(business?.isBusinessActive)}
-                </StyledTableData>
-                <StyledTableData>
-                  {formatDate(new Date(business.createdAt))}
-                </StyledTableData>
+            <thead
+              style={{
+                backgroundColor: ' #ffffff !important',
+                textTransform: 'capitalize',
+              }}
+            >
+              <tr>
+                <StyledTableHead scope="col">id</StyledTableHead>
+                <StyledTableHead scope="col">organization name</StyledTableHead>
+                <StyledTableHead scope="col">business type</StyledTableHead>
+                <StyledTableHead scope="col">business email</StyledTableHead>
+                <StyledTableHead scope="col">active</StyledTableHead>
+                <StyledTableHead scope="col">
+                  date of registration
+                </StyledTableHead>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {data?.data.documents?.map((business) => (
+                <tr
+                  key={business.id}
+                  onClick={() => {
+                    setSelectedRow(business.id);
+                    modalRef.current.open();
+                  }}
+                >
+                  <StyledTableData>
+                    {truncateText(business.id, 15)}
+                  </StyledTableData>
+                  <StyledTableData>
+                    {truncateText(business.companyName1, 17)}
+                  </StyledTableData>
+                  <StyledTableData>{business.businessType}</StyledTableData>
+                  <StyledTableData>{business.email}</StyledTableData>
+                  <StyledTableData>
+                    {String(business?.isBusinessActive)}
+                  </StyledTableData>
+                  <StyledTableData>
+                    {formatDate(new Date(business.createdAt))}
+                  </StyledTableData>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : isLoading ? (
+          <StyledTableRowNotFound>
+            <Image height="100" width="100" src={Loading} alt="loading gif" />
+            <p>fetching data...</p>
+          </StyledTableRowNotFound>
+        ) : (
+          <StyledTableRowNotFound>
+            <Image height="100" width="100" src={NotFound} alt="loading gif" />
+            <p>no data found</p>
+          </StyledTableRowNotFound>
+        )}
 
         <Modal ref={modalRef} trigger={<></>}>
           <section>

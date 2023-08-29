@@ -1,5 +1,6 @@
 'use client';
 import React, { useEffect } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 
 import { UserDetails } from '@/interfaces/user.interface';
@@ -27,6 +28,7 @@ import {
   StyledLabel,
   StyledDatePickerInput,
   StyledDateFilteringContainer,
+  StyledTableRowNotFound,
 } from '@/styles/main.styles';
 import styles from '@/styles/date-picker.module.css';
 
@@ -46,6 +48,8 @@ import Button from '@/components/button/button.component';
 
 import PeopleActive from '@/public/people-active.svg';
 import FilterIcon from '@/public/filter.svg';
+import Loading from '@/public/loading.gif';
+import NotFound from '@/public/smartphone.png';
 
 const Users = () => {
   const [currentPage, setCurrentPage] = React.useState(1);
@@ -84,9 +88,9 @@ const Users = () => {
     }
   };
 
-  const { data } = useGetAllUsers(
+  const { data, isLoading } = useGetAllUsers(
     `page=${currentPage}${
-      debouncedSearchText && `&email=${debouncedSearchText}`
+      debouncedSearchText && `&email=~${debouncedSearchText}`
     }${
       endDate && startDate
         ? `&endDate=${endDate.toISOString()}&startDate=${startDate.toISOString()}`
@@ -175,14 +179,14 @@ const Users = () => {
                       />
                     </div>
                     <Button
-                      text="search by date"
                       handleClick={(e) => {
                         e?.preventDefault();
                         datePickerRef.current?.close();
                       }}
-                    />
+                    >
+                      search by date
+                    </Button>
                     <Button
-                      text="reset"
                       primary
                       handleClick={(e) => {
                         e?.preventDefault();
@@ -190,7 +194,9 @@ const Users = () => {
                         setStartDate(undefined);
                         datePickerRef.current?.close();
                       }}
-                    />
+                    >
+                      reset
+                    </Button>
                   </StyledForm>
                 </>
               </StyledDateFilteringContainer>
@@ -209,58 +215,70 @@ const Users = () => {
           </StyledControls>
         </StyledPaginationContainer>
 
-        <table
-          role="presentation"
-          width="100%"
-          cellPadding="0"
-          cellSpacing="0"
-          style={{
-            minWidth: '100%',
-            height: 'auto',
-            backgroundColor: '#ffffff !important',
-            textAlign: 'left',
-          }}
-        >
-          <thead
+        {data?.data?.count && data?.data?.count > 0 && !isLoading ? (
+          <table
+            role="presentation"
+            width="100%"
+            cellPadding="0"
+            cellSpacing="0"
             style={{
-              backgroundColor: ' #ffffff !important',
-              textTransform: 'capitalize',
+              minWidth: '100%',
+              height: 'auto',
+              backgroundColor: '#ffffff !important',
+              textAlign: 'left',
             }}
           >
-            <tr>
-              <StyledTableHead scope="col">id</StyledTableHead>
-              <StyledTableHead scope="col">name</StyledTableHead>
-              <StyledTableHead scope="col">email</StyledTableHead>
-              <StyledTableHead scope="col">phone number</StyledTableHead>
-              <StyledTableHead scope="col">active</StyledTableHead>
-              <StyledTableHead scope="col">
-                date of registration
-              </StyledTableHead>
-            </tr>
-          </thead>
-          <tbody>
-            {(data?.data.documents as UserDetails[])?.map((user) => (
-              <StyledTableRow
-                key={user.id}
-                onClick={() => {
-                  setSelectedRow(user.id);
-                  modalRef.current.open();
-                }}
-              >
-                <StyledTableData>{truncateText(user.id, 15)}</StyledTableData>
-                <StyledTableData>
-                  {user.firstName} {user.lastName}
-                </StyledTableData>
-                <StyledTableData>{user.email}</StyledTableData>
-                <StyledTableData>{user.phoneNumber}</StyledTableData>
-                <StyledTableData>{String(user?.isActive)}</StyledTableData>
-                <StyledTableData>
-                  {formatDate(new Date(user.createdAt))}
-                </StyledTableData>
-              </StyledTableRow>
-            ))}
-          </tbody>
-        </table>
+            <thead
+              style={{
+                backgroundColor: ' #ffffff !important',
+                textTransform: 'capitalize',
+              }}
+            >
+              <tr>
+                <StyledTableHead scope="col">id</StyledTableHead>
+                <StyledTableHead scope="col">name</StyledTableHead>
+                <StyledTableHead scope="col">email</StyledTableHead>
+                <StyledTableHead scope="col">phone number</StyledTableHead>
+                <StyledTableHead scope="col">active</StyledTableHead>
+                <StyledTableHead scope="col">
+                  date of registration
+                </StyledTableHead>
+              </tr>
+            </thead>
+            <tbody>
+              {(data?.data.documents as UserDetails[])?.map((user) => (
+                <StyledTableRow
+                  key={user.id}
+                  onClick={() => {
+                    setSelectedRow(user.id);
+                    modalRef.current.open();
+                  }}
+                >
+                  <StyledTableData>{truncateText(user.id, 15)}</StyledTableData>
+                  <StyledTableData>
+                    {user.firstName} {user.lastName}
+                  </StyledTableData>
+                  <StyledTableData>{user.email}</StyledTableData>
+                  <StyledTableData>{user.phoneNumber}</StyledTableData>
+                  <StyledTableData>{String(user?.isActive)}</StyledTableData>
+                  <StyledTableData>
+                    {formatDate(new Date(user.createdAt))}
+                  </StyledTableData>
+                </StyledTableRow>
+              ))}
+            </tbody>
+          </table>
+        ) : isLoading ? (
+          <StyledTableRowNotFound>
+            <Image height="100" width="100" src={Loading} alt="loading gif" />
+            <p>fetching data...</p>
+          </StyledTableRowNotFound>
+        ) : (
+          <StyledTableRowNotFound>
+            <Image height="100" width="100" src={NotFound} alt="loading gif" />
+            <p>no data found</p>
+          </StyledTableRowNotFound>
+        )}
         <Modal ref={modalRef} trigger={<></>}>
           <section>
             <ModalHeadingTextContainer>
