@@ -1,0 +1,43 @@
+
+# trigger:
+# - business-crm
+trigger:
+  branches:
+    include:
+    - development
+  paths:
+    include:
+    - athena-client/*
+
+variables:
+  uiSource: 'athena-client'
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- task: NodeTool@0
+  inputs:
+    versionSpec: '18.x'
+  displayName: 'Install Node.js'
+
+- script: |
+    pushd $(uiSource)
+    yarn install
+    yarn build
+    popd
+  displayName: 'yarn install and build'
+
+- task: ArchiveFiles@2
+  inputs:
+    rootFolderOrFile: 'athena-client/out'
+    includeRootFolder: false
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    replaceExistingArchive: true
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'

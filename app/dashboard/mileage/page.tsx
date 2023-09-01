@@ -235,7 +235,7 @@ const Mileage = () => {
               }}
             >
               <tr>
-                <StyledTableHead scope="col">business ID</StyledTableHead>
+                <StyledTableHead scope="col">mileage ID</StyledTableHead>
                 <StyledTableHead scope="col">round trip</StyledTableHead>
                 <StyledTableHead scope="col">purpose of trip</StyledTableHead>
                 <StyledTableHead scope="col">start post code</StyledTableHead>
